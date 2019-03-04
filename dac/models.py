@@ -43,6 +43,8 @@ class Review(models.Model):
 class Beer(models.Model):
 	name = models.CharField(max_length=30, unique=True)
 	tagline = models.CharField(max_length=128)
+	image = models.ImageField(upload_to='beer_images', blank=True)
+
 	description = models.TextField(blank=False)
 	abv = models.FloatField(blank=False)
 	ibu = models.IntegerField(blank=False)
