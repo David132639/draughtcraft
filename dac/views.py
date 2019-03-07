@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 # General site pages
 def index(request):
 	context_dict = {}
-	return HttpResponse("test")
+	return render(request, 'dac/index.html', context=context_dict)
 
 def sitemap(request):
 	return HttpResponse("A sitemap")
