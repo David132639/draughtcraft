@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    
+    <style>
+        body {
+          background-color: rgb(133, 228, 170);
+          color:black;
+          font-family: monospace;
+          text-align: center;
+          
+        }
+
+        div .row
+        {
+          padding: 5px;
+        }
+        div .col-sm-9
+        {
+          padding-top:42px;
+          padding-bottom:42px;
+        }
+        div .col-sm-4, .col-sm-3, div .col-sm-2, .col-sm-1, 
+        {
+          padding: 5px;
+        }
+        div .col-sm-12
+        {
+          border: 1px solid rgb(87, 90, 83);
+          background-color:rgb(252, 252, 252);
+        }
+        
+        </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a href="index.html"type="button" class="btn btn_info navbar-btn">
+          <span class="glyphicon glyphicon-home"></span>&nbsp;Home</a>
+        </div>
+
+        <ul class="nav navbar-nav">
+          <li><a href="#">Beers</a></li>
+          <li><a href="#">Bars</a></li>
+        </ul>
+        
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
+        </ul>
+
+        <form class="navbar-form navbar-right" action="/action_page.php">
+            <div class="form-group">
+              <input type="text" class="form-control" name="Search" placeholder="What are you looking for...">
+            </div>
+        </form>
+      </div>
+    </nav>
+
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-1">
+          <h1>Popular Beers</h1>
+          <div class="col-sm-12">
+              <div class="row">
+                  <div class="col-sm-4">
+                      
+                    <img src="beer1.jpg" height="200" width="100%"/>
+                  </div>
+                  <div class="col-sm-4">
+                      <img src="beer2.jpg" height="200" width="100%"/>
+                  </div>
+                  <div class="col-sm-4">
+                      <img src="beer3.jpg" height="200" width="100%"/>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-4">beer1</div>
+                  <div class="col-sm-4">beer2</div>
+                  <div class="col-sm-4">beer3</div>
+              </div>  
+          </div>
+        </div>      
+        <div class="col-sm-4 col-sm-offset-1">
+          <h1>Popular Bars</h1>
+          <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-3">
+                    <img src="pub1.jpg" height="100" width="100%"/>
+                </div>
+                <div class="col-sm-9">Pub Name / Description</div>
+            </div>          
+            <div class="row">
+                <div class="col-sm-3">
+                    <img src="pub2.jpg" height="100" width="100%"/>
+                </div>
+                <div class="col-sm-9">Pub Name / Description</div>
+            </div>          
+            <div class="row">
+                <div class="col-sm-3">
+                    <img src="pub3.jpg" height="100" width="100%"/>
+                </div>
+                <div class="col-sm-9">Pub Name / Description</div>
+            </div>  
+          </div>        
+        </div>
+     </div>
+
+     <div class="row navbar navbar-fixed-bottom">
+        <div class="col-sm-2 col-sm-offset-3">
+            <a href="#">Sitemap</a>
+        </div>
+        <div class="col-sm-2">
+            <a href="#">About us</a>
+        </div>
+        <div class="col-sm-2">
+            <a href="#">Privacy policy</a>
+        </div>
+    </div>
+
+  </body>
+</html>
