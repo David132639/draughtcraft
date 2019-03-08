@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from dac.models import Beer
@@ -20,10 +20,19 @@ def sitemap(request):
 
 #beer stuff
 def beers(request,beer_slug=None):
-	context_dict = {'beer_name': beer_slug, }
+	context_dict = {'beer': None}
 
+
+	
+	#this will probably be done with ajax for multiple beers
+	#pagifying with bootstrap also?
 	if not beer_slug:
 		return HttpResponse("where beers will be listed")
+
+	#an explicit beer slug has been passed so just get that beer specifically
+	beer = [get_object_or_404(Beer,slug=beer_slug)]
+	context_dict["beer"] = beer
+
 
 	return render(request,'dac/beer.html',context_dict)
 
