@@ -1,10 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from dac.models import Beer
+
 
 # General site pages
 def index(request):
-	context_dict = {}
+	context_dict = {"beers":None,"pubs":None}
+	#get database stuff
+
+	beers = Beer.objects.all()
+	context_dict["beers"] = beers
+
 	return render(request, 'dac/index.html', context=context_dict)
 
 def sitemap(request):

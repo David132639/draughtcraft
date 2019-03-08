@@ -10,8 +10,8 @@ urlpatterns = [
 url(r'^$', views.index, name='index'),
 url(r'^beers/$', views.beers, name='beers'),
 url(r'^beers/(?P<beer_slug>[\w\-]+)/$', views.beers, name='beers'),
-url(r'^beers/(?P<beer_slug>[\w\-]+)/reviews$', views.beers_reviews, name='beers'),
-url(r'^beers/(?P<beer_slug>[\w\-]+)/add_review$', views.add_beer_review, name='beers'),
+url(r'^beers/(?P<beer_slug>[\w\-]+)/reviews$', views.beers_reviews, name='beers_view_review'),
+url(r'^beers/(?P<beer_slug>[\w\-]+)/add_review$', views.add_beer_review, name='beer_add_review'),
 
 
 #pubs

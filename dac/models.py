@@ -45,15 +45,18 @@ class Beer(models.Model):
 	name = models.CharField(max_length=30, unique=True)
 	tagline = models.CharField(max_length=128)
 	image = models.ImageField(upload_to='beer_images', blank=True)
-
 	description = models.TextField(blank=False)
 	abv = models.FloatField(blank=False)
 	ibu = models.IntegerField(blank=False)
 	og = models.IntegerField(blank=False)
 	calories = models.IntegerField(blank=False)
+	slug = models.SlugField(unique=True)
 
 	ingredients = models.ManyToManyField(Ingredient)
 	flavors = models.ManyToManyField(Flavor)
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.name)
+		super(Beer, self).save(*args, **kwargs)
 
 class Business(models.Model):
 	name = models.CharField(max_length=256, unique=True)
@@ -68,7 +71,7 @@ class Business(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.name)
-		super(Category, self).save(*args, **kwargs)
+		super(Business, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.name + " (" + self.address + ")"
