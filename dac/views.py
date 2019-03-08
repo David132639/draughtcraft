@@ -17,8 +17,7 @@ def beers(request,beer_slug=None):
 
 	if not beer_slug:
 		return HttpResponse("where beers will be listed")
-	print(beer_slug)
-	#return HttpResponse("a specific beer called "+beer_slug)
+
 	return render(request,'dac/beer.html',context_dict)
 
 def add_beer_review(request,beer_slug):
@@ -32,7 +31,6 @@ def beers_reviews(request,beer_slug):
 	#get the reviews associated with the beer and return the stuff
 	#use same template as pub reviews
 	return HttpResponse("not implemented")
-	pass
 
 
 #pub stuff
@@ -47,7 +45,6 @@ def pubs(request,pub_slug=None):
 def pubs_beers(request,pub_slug):
 	#return a list of the beers that the pub stocks
 	return HttpResponse("not implemented")
-	pass
 
 
 def pub_reviews(request,pub_slug):
@@ -57,6 +54,9 @@ def pub_reviews(request,pub_slug):
 	#use same template as pub reviews
 	return HttpResponse("not implemented yet")
 
+
+def about(request):
+	return render(request,'dac/about.html')
 
 #searching stuff
 
