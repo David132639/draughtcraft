@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url,include
 from dac import views
 
 
@@ -25,8 +25,7 @@ url(r'^sitemap/$',views.sitemap,name='sitemap'),
 url(r'^about/$',views.about,name='about'),
 
 
-#accounts, replaced with redux backend
-url(r'^accounts/', include('registration.backends.simple.urls')),
+#accounts, replaced with redux backend, seperate actual logic of app from redux
 url(r'^accounts/reviews/$', views.user_reviews, name='reviews'),
 url(r'^restricted/$', views.restricted, name='restricted'),
 ]
