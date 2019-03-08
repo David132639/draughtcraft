@@ -1,0 +1,40 @@
+{% extends 'dac/base.html' %}
+{% load staticfiles %}
+{% block title_block%}
+  {{ beer_name }}
+{% endblock %}
+{% block body_block %}
+  <div class="container w-100">
+    <div class="row">
+          <div class="col-md-2">
+            Picture of the beer
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-12">
+                {{ beer_name }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                Description
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                Stars + Link to reviews
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                Ingredients
+              </div>
+              <div class="col-md-6">
+                Tasting notes
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+
+{% endblock %}
