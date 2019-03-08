@@ -13,12 +13,13 @@ def sitemap(request):
 
 #beer stuff
 def beers(request,beer_slug=None):
-	context_dict = {}
+	context_dict = {'beer_name': beer_slug, }
 
 	if not beer_slug:
 		return HttpResponse("where beers will be listed")
 	print(beer_slug)
-	return HttpResponse("a specific beer called "+beer_slug)
+	#return HttpResponse("a specific beer called "+beer_slug)
+	return render(request,'dac/beer.html',context_dict)
 
 def add_beer_review(request,beer_slug):
 	#basic form for user adding review to a specific beer
