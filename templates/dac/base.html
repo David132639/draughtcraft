@@ -55,9 +55,23 @@
         </li> -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
+
+        {% if user.is_authenticated %}
+
+          <li>Hey there {{ user.username }}! </a></li>
+
+          <li><a href="{% url 'auth_logout' %}"><span class="glyphicon glyphicon-log-in"></span>not you?</a></li>
+
+        {% else %}
+
       	<li><a href="{% url 'auth_login' %}"><span class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
         <li><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+      
+        {% endif %}
+
       </ul>
+
+
     </div>
   </nav>
 

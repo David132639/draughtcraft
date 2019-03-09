@@ -1,5 +1,6 @@
 import os
 import django
+from django.core.files import File
 
 def populate():
 
@@ -47,6 +48,7 @@ def populate():
 
 
 	add_beer(name='Caesar Augustus',
+				img_name = "caesar-augustus.jpeg",
 				tagline='Lager / IPA hybrid',
 				description = "This Lager / IPA hybrid is a revolution in \
 				refreshment and flavour. All the crisp clean notes of the \
@@ -62,6 +64,7 @@ def populate():
 				flavors["biscuity"]])
 
 	add_beer(name='Joker IPA',
+				img_name = "joker-ipa.jpg",
 				tagline='Wickedly Hoppy',
 				description = "There's at least one in every pack and this is \
 				our very own agent of chaos. Created from a complex layer of \
@@ -95,8 +98,12 @@ def add_flavor(name, category):
 	print('- Flavor: {0}, Created: {1}'.format(str(f), str(created)))
 	return f
 
-def add_beer(name, tagline, description, abv, ibu, og, calories, flavors):
+def add_beer(name,img_name, tagline, description, abv, ibu, og, calories, flavors):
+
+	img_file = os.path.join("beer_images",img_name)
+	print(img_file)
 	b, created = Beer.objects.get_or_create(name=name,
+												image = img_file,
 												tagline=tagline,
 												description=description,
 												abv=abv,

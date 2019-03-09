@@ -20,18 +20,20 @@ def sitemap(request):
 
 #beer stuff
 def beers(request,beer_slug=None):
-	context_dict = {'beer': None}
+	context_dict = {'beer': None,}
 
 
 	
-	#this will probably be done with ajax for multiple beers
-	#pagifying with bootstrap also?
+	#render beer_list.html saves trouble with multi purpose page
+	#could use template tags as singular beer will be reapeated
 	if not beer_slug:
 		return HttpResponse("where beers will be listed")
 
 	#an explicit beer slug has been passed so just get that beer specifically
-	beer = [get_object_or_404(Beer,slug=beer_slug)]
+	beer = get_object_or_404(Beer,slug=beer_slug)
+	print(beer.image)
 	context_dict["beer"] = beer
+	context_dict["single"] = True
 
 
 	return render(request,'dac/beer.html',context_dict)
