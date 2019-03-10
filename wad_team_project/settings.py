@@ -56,11 +56,12 @@ MIDDLEWARE = [
 #Login stuff for redux
 
 REGISTRATION_OPEN = True
-ACCOUNT_ACTIVATION_DAYS = 7
-REGISTRATION_AUTO_LOGIN = True
 LOGIN_REDIRECT_URL = '/draughtandcraft/'
+REGISTER_REDIRECT_URL = '/draughtandcraft/accounts/details'
 LOGIN_URL = '/accounts/login/'
+REGISTRATION_FORM = "dac.forms.RegisterForm"
 
+AUTH_USER_MODEL = "dac.User"
 
 ROOT_URLCONF = 'wad_team_project.urls'
 

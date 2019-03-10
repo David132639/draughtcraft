@@ -1,6 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.template.defaultfilters import slugify
+
+class User(AbstractUser):
+	is_business = models.BooleanField(default=False)
 
 class Ingredient(models.Model):
 	MALTS = "MA"

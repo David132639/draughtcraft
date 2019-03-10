@@ -128,7 +128,7 @@ if __name__ == '__main__':
 	django.setup()
 
 	from dac.models import Ingredient, Flavor, Beer, Business, UserProfile
-	from django.contrib.auth.models import User
+	from dac.models import User
 	from django.db import IntegrityError
 
 	populate()  # Call the populate function, which calls the

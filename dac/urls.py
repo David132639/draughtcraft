@@ -1,8 +1,11 @@
 from django.conf.urls import url,include
 from dac import views
-
+from dac.views import UserRegistrationView
 
 '''List reviews and pubs subject to change'''
+# Create a new class that redirects the user to the index page,
+#if successful at logging
+
 
 urlpatterns = [
 
@@ -26,6 +29,10 @@ url(r'^about/$',views.about,name='about'),
 
 
 #accounts, replaced with redux backend, seperate actual logic of app from redux
+url(r'^accounts/register/$',UserRegistrationView.as_view(),name='registration_register'),
+url(r'^accounts/', include('registration.backends.simple.urls')),
+
 url(r'^accounts/reviews/$', views.user_reviews, name='reviews'),
+url(r'^accounts/details/$',views.user_details,name='user_details'),
 url(r'^restricted/$', views.restricted, name='restricted'),
 ]

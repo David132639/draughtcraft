@@ -1,7 +1,10 @@
 from django.shortcuts import render,get_object_or_404
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from dac.models import Beer
+from registration.backends.simple.views import RegistrationView
 
 
 # General site pages
@@ -83,6 +86,30 @@ def search(request):
 	pass
 
 #account functionality
+
+class UserRegistrationView(RegistrationView):
+
+
+	# def get_success_url(self, user):
+	# 	'''send the user to setup their accounts other features'''
+	# 	print("redirect called")
+	# 	return "/account"
+
+	def register(self,form):
+		print("register called")
+		user = form.save()
+		user.set_password(user.password)
+		user.save()
+		#spicy autologin
+		username = self.request.POST['username']
+		password = self.request.POST['password1']
+		#auth_user = authenticate(username=username, password=password)
+		auth_login(self.request,user)
+
+
+@login_required
+def user_details(request):
+	return HttpResponse("what a meme")
 
 @login_required
 def user_reviews(request):
