@@ -3,16 +3,19 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from dac.models import Beer
+from dac.models import Beer, Business,UserProfile
+from dac.forms import UserProfileForm, UserProfileBusinessForm
 from registration.backends.simple.views import RegistrationView
 
 
 # General site pages
 def index(request):
-	context_dict = {"beers":None,"pubs":None}
-	#get database stuff
+	context_dict = {"beers":None,"business":None}
 
-	beers = Beer.objects.all()
+	#get top three rated beers but not implemented yet
+	beers = Beer.objects.all()[:3]
+	business = Business.objects.all()[:3]
+	context_dict["business"] = business
 	context_dict["beers"] = beers
 
 	return render(request, 'dac/index.html', context=context_dict)
@@ -25,11 +28,8 @@ def sitemap(request):
 def beers(request,beer_slug=None):
 	context_dict = {'beer': None,}
 
-
-	
-	#render beer_list.html saves trouble with multi purpose page
-	#could use template tags as singular beer will be reapeated
 	if not beer_slug:
+		context_dict['beers'] = Beer.objects.all()
 		return HttpResponse("where beers will be listed")
 
 	#an explicit beer slug has been passed so just get that beer specifically
@@ -87,34 +87,71 @@ def search(request):
 
 #account functionality
 
+
+#account entrypoint
 class UserRegistrationView(RegistrationView):
-
-
-	# def get_success_url(self, user):
-	# 	'''send the user to setup their accounts other features'''
-	# 	print("redirect called")
-	# 	return "/account"
+	def get_success_url(self, user):
+		'''send the user to setup their accounts other features'''
+		return "/draughtandcraft/accounts/details"
 
 	def register(self,form):
-		print("register called")
 		user = form.save()
+		#set user attributes/roles
+		user.is_business = form.cleaned_data['is_business']
 		user.set_password(user.password)
 		user.save()
 		#spicy autologin
 		username = self.request.POST['username']
 		password = self.request.POST['password1']
-		#auth_user = authenticate(username=username, password=password)
 		auth_login(self.request,user)
 
 
 @login_required
 def user_details(request):
-	return HttpResponse("what a meme")
+	#user account creaton stuff
+	
+
+	profile = UserProfile.objects.get_or_create(user=request.user)[0]
+	
+	if request.user.is_business:
+		form = UserProfileForm({'avatar':profile.avatar})
+		pass
+	else:
+		pass
+		#need to get stuff from the new business to be made
+		# form = UserProfileBusinessForm({
+		# 	'avatar':profile.avatar,
+		# 	'business_name':profile.business_name,
+		# 	'street_address':profile.street_address,
+		# 	'country':profile.country,
+		# 	'business_contact':profile.business_contact
+		# 	})
+
+	if request.method == 'POST':
+
+		if request.user.is_business:
+			form = UserProfileBusinessForm(request.POST, request.FILES, instance=userprofile)
+		else:
+			form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+		if form.is_valid():
+			form.save(commit=True)
+			return redirect('profile', user.username)
+		else:
+			print(form.errors)
+
+
+
+
+	return render(request,'dac/userProfile.html',{'form':form,'profile':profile})
+
 
 @login_required
 def user_reviews(request):
-	context_dict = {}
-	HttpResponse("not implemented")
+	context_dict = {'reviews':None}
+	#get all the reviews from the current user
+	user = UserProfile.objects.get(user=request.user)
+	context_dict['reviews'] = Reviews.objects.filter(submitter=user)
+	HttpResponse("needs a page")
 	pass
 
 def login(request):

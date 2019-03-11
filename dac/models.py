@@ -82,7 +82,6 @@ class Business(models.Model):
 class Review(models.Model):
 	rating = models.PositiveSmallIntegerField(default=1)
 	review = models.TextField(blank=False)
-
 	submitter = models.ForeignKey(User, on_delete=models.CASCADE)
 	flavors = models.ManyToManyField(Flavor)
 	beer = models.OneToOneField(Beer)
@@ -90,8 +89,6 @@ class Review(models.Model):
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	avatar = models.ImageField(upload_to='profile_images', blank=True)
-	is_business = models.BooleanField(default=False)
-
 	business = models.OneToOneField(Business, on_delete=models.CASCADE,
 		primary_key=True
 	)
