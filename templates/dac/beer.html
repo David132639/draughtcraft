@@ -1,40 +1,53 @@
 {% extends 'dac/base.html' %}
 {% load staticfiles %}
 {% block title_block%}
-  {{ beer_name }}
+  {{ beer.name }}
 {% endblock %}
 {% block body_block %}
   <div class="container w-100">
     <div class="row">
-          <div class="col-md-2">
-            Picture of the beer
+      <div class="col-md-2">
+        <img class="img-fluid rounded img-thumbnail" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-12">
+            <strong> {{ beer.name }} </strong>
           </div>
-          <div class="col-md-10">
-            <div class="row">
-              <div class="col-md-12">
-                {{ beer_name }}
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                Description
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                Stars + Link to reviews
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                Ingredients
-              </div>
-              <div class="col-md-6">
-                Tasting notes
-              </div>
-            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p id="description">{{ beer.description }}</p>
           </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            Rated something out of something 
+            <a href="{% url 'beer_reviews' beer.slug %}"> view reviews</a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <strong>Ingredients</strong><br>
+            <p id="ingredients">
+              {% for part in beer.ingredients.all %}
+                {{ part.name }}
+              {% endfor %}
+            </p>
+          </div>
+          <div class="col-md-6">
+            <strong>Tasting notes</strong>
+            <p id="flavours">
+              <ul>
+            {% for flavor in beer.flavors.all %}
+            <li>{{ flavor.name }}</li>
+            {% endfor %}
+
+          </p>
+          </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
 {% endblock %}
