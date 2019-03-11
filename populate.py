@@ -14,19 +14,24 @@ def populate():
 
 	flavors = {	"yellow": add_flavor('Yellow', Flavor.COLOR),
 				"gold": add_flavor('Gold', Flavor.COLOR),
+				"amber": add_flavor('Amber', Flavor.COLOR),
 				"cedar": add_flavor('Cedar', Flavor.AROMA),
+				"heather": add_flavor('Heather', Flavor.AROMA),
 				"caramel": add_flavor('Caramel', Flavor.AROMA),
 				"orange": add_flavor('Orange', Flavor.AROMA),
 				"citrus": add_flavor('Citrus', Flavor.AROMA),
-				"fresh": add_flavor('Fresh', Flavor.AROMA),
+				"sweet": add_flavor('Sweet', Flavor.AROMA),
+				"fresha": add_flavor('Fresh', Flavor.AROMA),
 				"zestya": add_flavor('Zesty', Flavor.AROMA),
 
 				"zestyt": add_flavor('Zesty', Flavor.TASTE),
+				"fresht": add_flavor('Fresh', Flavor.TASTE),
 				"sharp": add_flavor('Sharp', Flavor.TASTE),
 				"crisp": add_flavor('Crisp', Flavor.TASTE),
 				"biscuity": add_flavor('Biscuity', Flavor.TASTE),
 				"fruity": add_flavor('Fruity', Flavor.TASTE),
 				"herbal": add_flavor('Herbal', Flavor.TASTE),
+				"honey": add_flavor('Honey', Flavor.TASTE),
 				"piney": add_flavor('Piney', Flavor.TASTE),
 				"med_bitter": add_flavor('Medium Bitterness', Flavor.TASTE)
 				}
@@ -57,7 +62,7 @@ def populate():
 				ibu=33,
 				og=1041,
 				calories=38,
-				flavors = [flavors["fresh"], flavors["zestya"],
+				flavors = [flavors["fresha"], flavors["zestya"],
 				flavors["fruity"], flavors["sharp"], flavors["crisp"],
 				flavors["biscuity"]])
 
@@ -77,6 +82,40 @@ def populate():
 				flavors["cedar"], flavors["caramel"], flavors["orange"],
 				flavors["citrus"], flavors["biscuity"], flavors["fruity"],
 				flavors["herbal"], flavors["piney"], flavors["med_bitter"]])
+
+	add_beer(name='Fraoch',
+				tagline='Heather Ale',
+				description = 'The Original Craft Beer; brewed in Scotland \
+				since 2000 B.C. The Brotherhood have been guardians of the \
+				ancient Gaelic recipe for "Leann Fraoch" (Heather Ale) since \
+				1988 & are proud to be the only brewery still producing this \
+				unique style of beer & distributing it world-wide. A light \
+				amber ale with floral-peaty aroma, full malt character, and \
+				a spicy herbal finish - This beer allows you to literally \
+				pour 4000 years of Scottish history into a glass.',
+				abv=5.0,
+				ibu=12,
+				og=1050,
+				calories=48,
+				flavors = [flavors["gold"], flavors["amber"],
+				flavors["fresha"], flavors["fresht"],
+				flavors["citrus"]])
+
+	add_beer(name='Birds & Bees',
+				tagline='Golden Summer Ale',
+				description = 'Brewed for the summer evenings when we down \
+				tools for the day and retire to the beer garden. This bright, \
+				golden ale is a blend of lager malt, Cascade, Amarillo & \
+				Nelson Sauvin hops with a late infusion of elderflower. \
+				Fruity, aromatic and deliciously refreshing.',
+				abv=4.3,
+				ibu=25,
+				og=1045,
+				calories=41,
+				flavors = [flavors["gold"], flavors["floral"],
+				flavors["zestya"], flavors["sweet"],
+				flavors["herbal"], flavors["honey"]])
+
 
 
 	print('\nSuperUser:', User.objects.get(is_superuser=True).username)
