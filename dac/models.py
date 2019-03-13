@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.template.defaultfilters import slugify
+from django.conf import settings
+from os.path import join
 
 class User(AbstractUser):
 	is_business = models.BooleanField(default=False)
@@ -88,7 +90,7 @@ class Review(models.Model):
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
-	avatar = models.ImageField(upload_to='profile_images', blank=True)
+	avatar = models.ImageField(upload_to='profile_images', blank=True,default=join(settings.MEDIA_ROOT,'user_images/default.png'))
 	business = models.OneToOneField(Business, on_delete=models.CASCADE,
 		primary_key=True
 	)

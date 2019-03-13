@@ -2,6 +2,7 @@ from django import forms
 from registration.forms import RegistrationForm
 from dac.models import User,UserProfile
 
+
 class RegisterForm(RegistrationForm):
 	'''custom register form for business functionality'''
 	is_business = forms.BooleanField(label="Business User",initial=False,required=False)
@@ -11,7 +12,7 @@ class RegisterForm(RegistrationForm):
 	pass
 
 class UserProfileForm(forms.ModelForm):
-	avatar = forms.ImageField(label='profile image',required=False)
+	avatar = forms.ImageField(label='profile image',required=False,)
 	class Meta:
 		model = UserProfile
 		fields = ('avatar',)

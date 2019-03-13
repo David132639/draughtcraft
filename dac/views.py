@@ -2,6 +2,7 @@ from django.shortcuts import render,get_object_or_404
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from dac.models import Beer, Business,UserProfile
 from dac.forms import UserProfileForm, UserProfileBusinessForm
@@ -30,14 +31,12 @@ def beers(request,beer_slug=None):
 
 	if not beer_slug:
 		context_dict['beers'] = Beer.objects.all()
-		return HttpResponse("where beers will be listed")
+		return render(request,'dac/beer_list.html',context_dict)
 
 	#an explicit beer slug has been passed so just get that beer specifically
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	print(beer.image)
 	context_dict["beer"] = beer
-	context_dict["single"] = True
-
 
 	return render(request,'dac/beer.html',context_dict)
 
@@ -92,10 +91,11 @@ def search(request):
 class UserRegistrationView(RegistrationView):
 	def get_success_url(self, user):
 		'''send the user to setup their accounts other features'''
-		return "/draughtandcraft/accounts/details"
+		
+		return reverse('user_details')
 
 	def register(self,form):
-		user = form.save()
+		user = form.save(commit=False)
 		#set user attributes/roles
 		user.is_business = form.cleaned_data['is_business']
 		user.set_password(user.password)
@@ -109,13 +109,9 @@ class UserRegistrationView(RegistrationView):
 @login_required
 def user_details(request):
 	#user account creaton stuff
-	
-
 	profile = UserProfile.objects.get_or_create(user=request.user)[0]
-	
-	if request.user.is_business:
+	if not request.user.is_business:
 		form = UserProfileForm({'avatar':profile.avatar})
-		pass
 	else:
 		pass
 		#need to get stuff from the new business to be made
@@ -130,19 +126,19 @@ def user_details(request):
 	if request.method == 'POST':
 
 		if request.user.is_business:
-			form = UserProfileBusinessForm(request.POST, request.FILES, instance=userprofile)
+			form = UserProfileBusinessForm(request.POST, request.FILES,instance=profile)
 		else:
-			form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+			form = UserProfileForm(request.POST, request.FILES,instance=profile)
 		if form.is_valid():
 			form.save(commit=True)
-			return redirect('profile', user.username)
+			return index(request)
 		else:
 			print(form.errors)
 
 
 
 
-	return render(request,'dac/userProfile.html',{'form':form,'profile':profile})
+	return render(request,'dac/userProfile.html',{'form':form,})
 
 
 @login_required
