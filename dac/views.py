@@ -138,7 +138,7 @@ def user_details(request):
 
 
 
-	return render(request,'dac/userProfile.html',{'form':form,})
+	return render(request,'dac/userProfile.html',{'form':form,'profile':profile})
 
 
 @login_required

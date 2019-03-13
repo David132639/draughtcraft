@@ -4,12 +4,16 @@
 {% endblock %}
 {% block body_block %}
 	<!--needs some sort of menu thing to see the reviews the user has and stuff on this page somewhere-->
-	
+
 	<div class="jumbotron">
 		<h1>Hey {{ user.username }} please personalise your account</h1>
 	</div>
+
+	<img src="{{ MEDIA_URL }}{{profile.avatar}}">
+{{ MEDIA_URL }}{{profile.avatar}}
+
 	<div class="form-group" >
-		<form class="form-inline" id="user_profile_form" method="post" action="{% url 'user_details' %}" >
+		<form class="form-inline" id="user_profile_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
 			{% csrf_token %}
 			{% for hidden in form.hidden_fields %}
 				{{ hidden }}
