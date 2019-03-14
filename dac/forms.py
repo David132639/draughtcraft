@@ -1,6 +1,6 @@
 from django import forms
 from registration.forms import RegistrationForm
-from dac.models import User,UserProfile
+from dac.models import User,UserProfile,Business
 
 
 class RegisterForm(RegistrationForm):
@@ -12,26 +12,27 @@ class RegisterForm(RegistrationForm):
 	pass
 
 class UserProfileForm(forms.ModelForm):
-	avatar = forms.ImageField(label='profile image',required=False,)
+	avatar = forms.ImageField(help_text='profile image',required=False,)
 	class Meta:
 		model = UserProfile
 		fields = ('avatar',)
 
-class UserProfileBusinessForm(UserProfileForm):
-	business_name = forms.CharField()
-	street_address = forms.CharField()
-	country = forms.CharField()
-	business_contact = forms.CharField()
+class BusinessForm(forms.ModelForm):
+	name = forms.CharField(help_text="Business Name")
+	address = forms.CharField(help_text="Street_address")
+	description = forms.CharField(help_text="Business Description")
+	slug = forms.CharField(help_text=forms.HiddenInput(),required=False)
+	#need auto complete field for beers
 
 	class Meta:
-		model = UserProfile
-		fields = ('avatar',
-			'business_name',
-			'street_address',
-			'country',
-			'business_contact')
+		model=Business
+		exclude = ('beers','owner','slug')
 
-class BeerReview(forms.Form):
+
+RATING_CHOICES = [("1","1: Very Poor"),("2","2"),("3","3"),("4","4"),("5","5: Excellent"),]
+
+class BeerReview(forms.ModelForm):
+	rating = forms.Select(choices=RATING_CHOICES)
 	pass
 
 

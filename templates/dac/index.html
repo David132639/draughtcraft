@@ -30,8 +30,8 @@
           <div class="card-header">Top Pubs</div>
           <div class="card-body">
             <!--django bar stuff in here-->
-            {% if pubs %}
-              {% for pub in pubs %}
+            {% if business %}
+              {% for pub in business %}
                 {{ pub.name }}
                 {{ pub.description }}<br/>
               {% endfor %}

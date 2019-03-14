@@ -63,12 +63,29 @@ class Beer(models.Model):
 		self.slug = slugify(self.name)
 		super(Beer, self).save(*args, **kwargs)
 
+class Review(models.Model):
+	rating = models.PositiveSmallIntegerField(default=1)
+	review = models.TextField(blank=False)
+	submitter = models.ForeignKey(User, on_delete=models.CASCADE)
+	flavors = models.ManyToManyField(Flavor)
+	beer = models.OneToOneField(Beer)
+
+class UserProfile(models.Model):
+	user = models.OneToOneField(User)
+	avatar = models.ImageField(upload_to='profile_images',default='profile_images/default.png')
+	
+
+	def __str__(self):
+		return self.user.username
+
 class Business(models.Model):
 	name = models.CharField(max_length=256, unique=True)
 	address = models.CharField(max_length=256)
 	description = models.TextField()
 	slug = models.SlugField(unique=True)
-
+	owner = models.OneToOneField(UserProfile, on_delete=models.CASCADE,
+		primary_key=True
+	)
 	beers = models.ManyToManyField(Beer)
 
 	class Meta:
@@ -81,19 +98,3 @@ class Business(models.Model):
 	def __str__(self):
 		return self.name + " (" + self.address + ")"
 
-class Review(models.Model):
-	rating = models.PositiveSmallIntegerField(default=1)
-	review = models.TextField(blank=False)
-	submitter = models.ForeignKey(User, on_delete=models.CASCADE)
-	flavors = models.ManyToManyField(Flavor)
-	beer = models.OneToOneField(Beer)
-
-class UserProfile(models.Model):
-	user = models.OneToOneField(User)
-	avatar = models.ImageField(upload_to='profile_images',default='profile_images/default.png')
-	business = models.OneToOneField(Business, on_delete=models.CASCADE,
-		primary_key=True
-	)
-
-	def __str__(self):
-		return self.user.username

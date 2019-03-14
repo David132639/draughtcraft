@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from dac.models import Beer, Business,UserProfile
-from dac.forms import UserProfileForm, UserProfileBusinessForm
+from dac.forms import UserProfileForm, BusinessForm
 from registration.backends.simple.views import RegistrationView
 
 
@@ -35,7 +35,6 @@ def beers(request,beer_slug=None):
 
 	#an explicit beer slug has been passed so just get that beer specifically
 	beer = get_object_or_404(Beer,slug=beer_slug)
-	print(beer.image)
 	context_dict["beer"] = beer
 
 	return render(request,'dac/beer.html',context_dict)
@@ -110,36 +109,31 @@ class UserRegistrationView(RegistrationView):
 def user_details(request):
 	#user account creaton stuff
 	profile = UserProfile.objects.get_or_create(user=request.user)[0]
-	if not request.user.is_business:
-		form = UserProfileForm({'avatar':profile.avatar})
-	else:
-		pass
-		#need to get stuff from the new business to be made
-		# form = UserProfileBusinessForm({
-		# 	'avatar':profile.avatar,
-		# 	'business_name':profile.business_name,
-		# 	'street_address':profile.street_address,
-		# 	'country':profile.country,
-		# 	'business_contact':profile.business_contact
-		# 	})
-
-	if request.method == 'POST':
-
-		if request.user.is_business:
-			form = UserProfileBusinessForm(request.POST, request.FILES,instance=profile)
+	profile_form = UserProfileForm({'avatar':profile.avatar})
+	context_dict = {"profile_form":profile_form}
+	if request.user.is_business:
+		if not hasattr(profile,'business'):
+			business = Business.objects.create(name=request.user.username+"s business",owner=profile)
 		else:
-			form = UserProfileForm(request.POST, request.FILES,instance=profile)
-		if form.is_valid():
-			form.save(commit=True)
+			business = profile.business
+		business_form = BusinessForm({'name':business.name,'address':business.address,'description':business.description})
+		context_dict['business_form'] = business_form
+	
+	if request.method == 'POST':
+		profile_form = UserProfileForm(request.POST, request.FILES,instance=profile)
+		if profile_form.is_valid():
+			profile_form.save(commit=True)
 			return index(request)
 		else:
-			print(form.errors)
+			print(profile_form.errors)
 
+		if request.user.is_business:
+			business_form = BusinessForm(request.POST, request.FILES,instance=business)
+			if business_form.is_valid():
+				business_form.save(commit=True)
+				return index(request)
 
-
-
-	return render(request,'dac/userProfile.html',{'form':form,'profile':profile})
-
+	return render(request,'dac/userProfile.html',context_dict)
 
 @login_required
 def user_reviews(request):
