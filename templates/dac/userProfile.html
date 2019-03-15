@@ -4,45 +4,55 @@
 {% endblock %}
 {% block body_block %}
 	<!--needs some sort of menu thing to see the reviews the user has and stuff on this page somewhere-->
+	<div class="container w-100">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="jumbotron">
+					<h1>Hey {{ user.username }}, please personalise your account</h1>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group" >
+					<form class="form-inline" id="user_profile_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
+						{% csrf_token %}
+						{% for hidden in profile_form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						{% for field in profile_form.visible_fields %}
+							{{ field.errors }}
+							{{ field.help_text }}
+							{{ field }}
+						{% endfor %}
+						<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
+					</form>
+					{% if business_form %}
+					<strong>Business information</strong>
+					<form class="" id="business_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
+						{% csrf_token %}
+						{% for hidden in business_form.hidden_fields %}
+							{{ hidden }}
+						{% endfor %}
+						{% for field in business_form.visible_fields %}
 
-	<div class="jumbotron">
-		<h1>Hey {{ user.username }} please personalise your account</h1>
+							{{ field.help_text }}
+							{{ field }}
+							{{ field.errors }} <br/>
+						{% endfor %}
+						<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
+					</form>
+
+					{% endif %}
+
+
+				</div>
+			</div>
+			<div class="col-md-8">
+				<img src="{{ MEDIA_URL }}{{profile.avatar}}"></img>
+		{{ MEDIA_URL }}{{profile.avatar}}
 	</div>
+</div>
+</div>
 
-	<img src="{{ MEDIA_URL }}{{profile.avatar}}">
-{{ MEDIA_URL }}{{profile.avatar}}
-
-	<div class="form-group" >
-		<form class="form-inline" id="user_profile_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
-			{% csrf_token %}
-			{% for hidden in profile_form.hidden_fields %}
-				{{ hidden }}
-			{% endfor %}
-			{% for field in profile_form.visible_fields %}
-				{{ field.errors }}
-				{{ field.help_text }}
-				{{ field }}
-			{% endfor %}
-			<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
-		</form>
-		{% if business_form %}
-		<strong>Business information</strong>
-		<form class="" id="business_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
-			{% csrf_token %}
-			{% for hidden in business_form.hidden_fields %}
-				{{ hidden }}
-			{% endfor %}
-			{% for field in business_form.visible_fields %}
-				
-				{{ field.help_text }}
-				{{ field }}
-				{{ field.errors }} <br/>
-			{% endfor %}
-			<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
-		</form>
-
-		{% endif %}
-
-
-	</div>
 {% endblock %}
