@@ -110,7 +110,7 @@ def user_details(request):
 	#user account creaton stuff
 	profile = UserProfile.objects.get_or_create(user=request.user)[0]
 	profile_form = UserProfileForm({'avatar':profile.avatar})
-	context_dict = {"profile_form":profile_form}
+	context_dict = {"profile_form":profile_form,'profile':profile}
 	if request.user.is_business:
 		if not hasattr(profile,'business'):
 			business = Business.objects.create(name=request.user.username+"s business",owner=profile)

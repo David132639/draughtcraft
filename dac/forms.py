@@ -20,7 +20,7 @@ class UserProfileForm(forms.ModelForm):
 class BusinessForm(forms.ModelForm):
 	name = forms.CharField(help_text="Business Name")
 	address = forms.CharField(help_text="Street_address")
-	description = forms.CharField(help_text="Business Description")
+	description = forms.Textarea()
 	slug = forms.CharField(help_text=forms.HiddenInput(),required=False)
 	#need auto complete field for beers
 
