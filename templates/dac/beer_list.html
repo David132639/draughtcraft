@@ -4,5 +4,37 @@
   List of beers
 {% endblock %}
 {% block body_block %}
-  To be implemented
+<div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4"><h2><u>All Available Beers</u></h2> </div>
+           </div>
+           <div class="row justify-content-center">
+               
+               <div class="col-md-5">
+                   
+                   
+                        {% for beer in beers %}
+                        <div class="row">
+                            <div class="col-sm-4">
+                                    <img class="img-thumbnail" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
+                                    
+                        </div>
+                        <div class="col-sm-8">
+                                <a href="{% url 'beers' beer.slug %}"> {{ beer.name }}
+                                        {{ beer.tagline }}</a> 
+                                       <p>{{ beer.description }}</p>
+                                              
+                            </div>
+                         
+                            {% endfor %}
+                 
+
+                    </div>
+                        
+              
+
+                </div>
+               
+      </div>
+
 {% endblock %}
