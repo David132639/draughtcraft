@@ -151,7 +151,7 @@ def user_details(request):
 		if request.user.is_business:
 			business_form = BusinessForm(request.POST, request.FILES,instance=business)
 			if business_form.is_valid():
-				business_form.save(commit=True)
+				business_form.save(commit=True,instance=business)
 				return index(request)
 
 	return render(request,'dac/userProfile.html',context_dict)

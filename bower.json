@@ -1,0 +1,21 @@
+{
+  "name": "draughtcraft",
+  "homepage": "https://github.com/David132639/draughtcraft",
+  "authors": [
+    "myles lamb <mylesalamb@gmail.com>"
+  ],
+  "description": "external components for frontend",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-bar-rating": "^1.2.2"
+  }
+}

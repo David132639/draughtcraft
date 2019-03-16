@@ -21,7 +21,7 @@ class BusinessForm(forms.ModelForm):
 	name = forms.CharField(help_text="Business Name")
 	address = forms.CharField(help_text="Street_address")
 	description = forms.Textarea()
-	slug = forms.CharField(help_text=forms.HiddenInput(),required=False)
+	slug = forms.CharField(widget=forms.HiddenInput(),required=False)
 	#need auto complete field for beers
 
 	class Meta:
@@ -29,7 +29,7 @@ class BusinessForm(forms.ModelForm):
 		fields = ('name','address','description')
 
 
-RATING_CHOICES = [("1","1: Very Poor"),("2","2"),("3","3"),("4","4"),("5","5: Excellent"),]
+RATING_CHOICES = [("1","1"),("2","2"),("3","3"),("4","4"),("5","5"),]
 
 class BeerReview(forms.ModelForm):
 	rating = forms.ChoiceField(help_text="rating",choices=RATING_CHOICES)
@@ -38,5 +38,10 @@ class BeerReview(forms.ModelForm):
 	class Meta:
 		model = Review
 		fields = ("rating","review")
+
+	#force the select field to have a bar rating id
+	def __init__(self, *args, **kwargs):
+		super(BeerReview, self).__init__(*args, **kwargs)
+		self.fields['rating'].widget.attrs.update({'id':'bar_rating'})
 
 

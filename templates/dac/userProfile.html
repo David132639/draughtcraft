@@ -35,7 +35,7 @@
 						<form class="" id="business_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
 							{% csrf_token %}
 							{% for hidden in business_form.hidden_fields %}
-								{{ hidden }}
+								{{ hidden.as_hidden }}
 							{% endfor %}
 							{% for field in business_form.visible_fields %}
 								{{ field.help_text }}
