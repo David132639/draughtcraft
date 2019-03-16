@@ -22,6 +22,17 @@
   margin-right: auto;
 }
 
+ .beer_thumbnail{
+  max-height: 150px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .row{
   margin-top:15px;
 }
+
+/* .list_item{
+  height: 25%;
+} */

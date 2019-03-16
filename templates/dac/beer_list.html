@@ -4,37 +4,31 @@
   List of beers
 {% endblock %}
 {% block body_block %}
-<div class="container">
+<div class="container w-100">
         <div class="row justify-content-center">
-            <div class="col-md-4"><h2><u>All Available Beers</u></h2> </div>
+            <div class="col-md-12"><h2>All Available Beers</h2> </div>
            </div>
-           <div class="row justify-content-center">
-               
-               <div class="col-md-5">
-                   
-                   
-                        {% for beer in beers %}
-                        <div class="row">
-                            <div class="col-sm-4">
-                                    <img class="img-thumbnail" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
-                                    
-                        </div>
-                        <div class="col-sm-8">
-                                <a href="{% url 'beers' beer.slug %}"> {{ beer.name }}
-                                        {{ beer.tagline }}</a> 
-                                       <p>{{ beer.description }}</p>
-                                              
-                            </div>
-                         
-                            {% endfor %}
-                 
 
-                    </div>
-                        
-              
+
+
+            {% for beer in beers %}
+            <div class="row list_item .row-eq-height justify-content-center">
+                <div class="col-md-4">
+                        <img class="img-thumbnail beer_thumbnail" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
 
                 </div>
-               
-      </div>
+                <div class="col-md-8">
+                    <a href="{% url 'beers' beer.slug %}"> {{ beer.name }}
+                            {{ beer.tagline }}</a>
+                           <p>{{ beer.description }}</p>
+
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+
+</div>
 
 {% endblock %}
