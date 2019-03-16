@@ -35,6 +35,9 @@ def beers(request,beer_slug=None):
 
 	#an explicit beer slug has been passed so just get that beer specifically
 	beer = get_object_or_404(Beer,slug=beer_slug)
+	ratings = Review.objects.filter(beer=beer)
+	if ratings:
+		context_dict["avg"] = sum(rating.rating for rating in ratings)/len(ratings)
 	context_dict["beer"] = beer
 
 	return render(request,'dac/beer.html',context_dict)
@@ -48,7 +51,7 @@ def add_beer_review(request,beer_slug):
 	try:
 	#check if the user has already submitted a review
 		prev_review = Review.objects.get(submitter=profile,beer=beer)
-		form = BeerReview({'review':prev_review.review})
+		form = BeerReview({'review':prev_review.review,"rating":prev_review.rating})
 		edit = True
 	except Review.DoesNotExist:
 	 	form = BeerReview()
@@ -63,6 +66,7 @@ def add_beer_review(request,beer_slug):
 			form = BeerReview(request.POST)
 		if form.is_valid():
 			review = form.save(commit=False)
+			print(type(review.rating))
 			review.beer = beer
 			review.submitter = profile
 			review.save()
