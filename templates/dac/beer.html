@@ -7,13 +7,13 @@
   <div class="container w-100">
     <div class="row">
       <div class="col">
-        <img class="" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
+        <img class="beer_image" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
       </div>
       <div class="col">
-        <strong> {{ beer.name }} </strong>       
+        <strong> {{ beer.name }} </strong>
         <p class="description" id="description">{{ beer.description }}</p>
       </div>
-      
+
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -22,7 +22,7 @@
         <a href="{% url 'beer_add_review' beer.slug %}">add a review</a>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="col-md-6">
         <strong>Ingredients</strong><br>
