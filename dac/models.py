@@ -98,4 +98,4 @@ class Review(models.Model):
 	review = models.TextField(blank=False)
 	submitter = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 	flavors = models.ManyToManyField(Flavor)
-	beer = models.OneToOneField(Beer)
+	beer = models.ForeignKey(Beer)

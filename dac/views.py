@@ -44,17 +44,23 @@ def add_beer_review(request,beer_slug):
 	#basic form for user adding review to a specific beer
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	profile = UserProfile.objects.get(user=request.user)
+	edit = False
 	try:
 	#check if the user has already submitted a review
 		prev_review = Review.objects.get(submitter=profile,beer=beer)
 		form = BeerReview({'review':prev_review.review})
+		edit = True
 	except Review.DoesNotExist:
 	 	form = BeerReview()
 	context_dict = {'beer':beer,'form':form}
 
 
+	print(edit)
 	if request.method == "POST":
-		form = BeerReview(request.POST)
+		if edit:
+			form = BeerReview(request.POST,instance = prev_review)
+		else:
+			form = BeerReview(request.POST)
 		if form.is_valid():
 			review = form.save(commit=False)
 			review.beer = beer
@@ -131,28 +137,33 @@ def user_details(request):
 	#user account creaton stuff
 	profile = UserProfile.objects.get_or_create(user=request.user)[0]
 	profile_form = UserProfileForm({'avatar':profile.avatar})
-	context_dict = {"profile_form":profile_form,'profile':profile}
+	context_dict = {"forms":[profile_form],'profile':profile}
+	
 	if request.user.is_business:
+		#if the user is just registering
 		if not hasattr(profile,'business'):
-			business = Business.objects.create(name=request.user.username+"s business",owner=profile)
+			business = Business.objects.create(owner=profile)
 		else:
 			business = profile.business
 		business_form = BusinessForm({'name':business.name,'address':business.address,'description':business.description})
-		context_dict['business_form'] = business_form
+		context_dict['forms'].append(business_form)
 	
 	if request.method == 'POST':
 		profile_form = UserProfileForm(request.POST, request.FILES,instance=profile)
-		if profile_form.is_valid():
-			profile_form.save(commit=True)
-			return index(request)
-		else:
-			print(profile_form.errors)
+		form_list = [profile_form]
 
+		#add the business form to the forms to be validated
 		if request.user.is_business:
+			print("update attempt")
 			business_form = BusinessForm(request.POST, request.FILES,instance=business)
-			if business_form.is_valid():
-				business_form.save(commit=True,instance=business)
-				return index(request)
+			form_list.append(business_form)
+		
+		#check if all of teh forms are valid and then save
+		if all([x.is_valid() for x in form_list]):
+			for form in form_list:
+				form.save(commit=True)
+			return index(request)
+
 
 	return render(request,'dac/userProfile.html',context_dict)
 

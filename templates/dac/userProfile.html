@@ -19,32 +19,22 @@
 			<div class="col-md-4">
 				<div class="form-group" >
 					<form class="form-inline" id="user_profile_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
-						{% csrf_token %}
-						{% for hidden in profile_form.hidden_fields %}
-							{{ hidden }}
-						{% endfor %}
-						{% for field in profile_form.visible_fields %}
-							{{ field.errors }}
-							{{ field.help_text }}
-							{{ field }}
-						{% endfor %}
 						<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
-					</form>
-					{% if business_form %}
-						<strong>Business information</strong>
-						<form class="" id="business_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
-							{% csrf_token %}
-							{% for hidden in business_form.hidden_fields %}
-								{{ hidden.as_hidden }}
+						
+						{% csrf_token %}
+						{% for form in forms %}
+							
+							{% for hidden in form.hidden_fields %}
+								{{ hidden }}
 							{% endfor %}
-							{% for field in business_form.visible_fields %}
+							{% for field in form.visible_fields %}
+								{{ field.errors }}
 								{{ field.help_text }}
 								{{ field }}
-								<br/>
 							{% endfor %}
-							<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
-						</form>
-					{% endif %}
+						{% endfor %}
+						
+					</form>
 				</div>
 			</div>
 		</div>
