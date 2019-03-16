@@ -1,5 +1,6 @@
  body {
-   padding-top: 70px;
+   margin-top: 100px;
+   margin-bottom: 70px;
  }
 
 .btn-primary {
@@ -13,3 +14,25 @@
 
 
 }
+
+.beer_image{
+  max-height: 200px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+ .beer_thumbnail{
+  max-height: 150px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.row{
+  margin-top:15px;
+}
+
+/* .list_item{
+  height: 25%;
+} */
