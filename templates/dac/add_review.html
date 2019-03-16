@@ -1,0 +1,27 @@
+{% extends 'dac/base.html' %}
+{% block title_block %}
+	Add review - beer.slug
+{% endblock %}
+{% block body_block %}
+	<div class="jumbotron">
+		
+		{{user.username}}'s review of {{beer.name}}'
+	</div>
+	<div class="row">
+		<div class="col">
+			
+			<form  id="beer_review_form" method="post" action="{% url 'beer_add_review' beer.slug %}">
+				{% csrf_token %}
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				{% for field in form.visible_fields %}
+					{{ field.errors }}
+					{{ field.help_text }}
+					{{ field }}
+				{% endfor %}
+				<input class="btn btn-primary" type="submit" name="submit" value="Submit reivew" />
+
+			</div>
+		</div>
+	{% endblock %}

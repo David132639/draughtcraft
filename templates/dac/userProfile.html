@@ -10,6 +10,9 @@
 				<div class="jumbotron">
 					<h1>Hey {{ user.username }}, please personalise your account</h1>
 				</div>
+				<div class="col-md-8">
+					<img src="{{ MEDIA_URL }}{{profile.avatar}}" class="float-left img-fluid profile_img"></img>
+				</div>
 			</div>
 		</div>
 		<div class="row">
@@ -28,31 +31,22 @@
 						<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
 					</form>
 					{% if business_form %}
-					<strong>Business information</strong>
-					<form class="" id="business_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
-						{% csrf_token %}
-						{% for hidden in business_form.hidden_fields %}
-							{{ hidden }}
-						{% endfor %}
-						{% for field in business_form.visible_fields %}
-
-							{{ field.help_text }}
-							{{ field }}
-							 <br/>
-						{% endfor %}
-						<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
-					</form>
-
+						<strong>Business information</strong>
+						<form class="" id="business_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
+							{% csrf_token %}
+							{% for hidden in business_form.hidden_fields %}
+								{{ hidden }}
+							{% endfor %}
+							{% for field in business_form.visible_fields %}
+								{{ field.help_text }}
+								{{ field }}
+								<br/>
+							{% endfor %}
+							<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
+						</form>
 					{% endif %}
-
-
 				</div>
 			</div>
-			<div class="col-md-8">
-				<img src="{{ MEDIA_URL }}{{profile.avatar}}"></img>
-		{{ MEDIA_URL }}{{profile.avatar}}
+		</div>
 	</div>
-</div>
-</div>
-
 {% endblock %}

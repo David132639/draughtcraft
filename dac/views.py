@@ -4,8 +4,8 @@ from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from dac.models import Beer, Business,UserProfile
-from dac.forms import UserProfileForm, BusinessForm
+from dac.models import Beer, Business,UserProfile,Review
+from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
 
 
@@ -39,10 +39,31 @@ def beers(request,beer_slug=None):
 
 	return render(request,'dac/beer.html',context_dict)
 
+@login_required
 def add_beer_review(request,beer_slug):
 	#basic form for user adding review to a specific beer
-	return HttpResponse("not implemented")
-	pass
+	beer = get_object_or_404(Beer,slug=beer_slug)
+	profile = UserProfile.objects.get(user=request.user)
+	try:
+	#check if the user has already submitted a review
+		prev_review = Review.objects.get(submitter=profile,beer=beer)
+		form = BeerReview({'review':prev_review.review})
+	except Review.DoesNotExist:
+	 	form = BeerReview()
+	context_dict = {'beer':beer,'form':form}
+
+
+	if request.method == "POST":
+		form = BeerReview(request.POST)
+		if form.is_valid():
+			review = form.save(commit=False)
+			review.beer = beer
+			review.submitter = profile
+			review.save()
+			return index(request)
+		#do the processing of the form later
+
+	return render(request,'dac/add_review.html',context_dict)
 
 
 def beers_reviews(request,beer_slug):
@@ -142,19 +163,6 @@ def user_reviews(request):
 	user = UserProfile.objects.get(user=request.user)
 	context_dict['reviews'] = Reviews.objects.filter(submitter=user)
 	HttpResponse("needs a page")
-	pass
-
-def login(request):
-	HttpResponse("not implemented")
-	pass
-
-@login_required
-def logout(request):
-	HttpResponse("not implemented")
-	pass
-
-def register(request):
-	HttpResponse("not implemented")
 	pass
 
 def restricted(request):

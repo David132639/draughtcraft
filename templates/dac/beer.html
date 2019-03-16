@@ -6,48 +6,41 @@
 {% block body_block %}
   <div class="container w-100">
     <div class="row">
-      <div class="col-md-2">
-        <img class="img-fluid rounded img-thumbnail" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
+      <div class="col">
+        <img class="" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
       </div>
-      <div class="col-md-10">
-        <div class="row">
-          <div class="col-md-12">
-            <strong> {{ beer.name }} </strong>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <p id="description">{{ beer.description }}</p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            Rated something out of something 
-            <a href="{% url 'beer_reviews' beer.slug %}"> view reviews</a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <strong>Ingredients</strong><br>
-            <p id="ingredients">
-              {% for part in beer.ingredients.all %}
-                {{ part.name }}
-              {% endfor %}
-            </p>
-          </div>
-          <div class="col-md-6">
-            <strong>Tasting notes</strong>
-            <p id="flavours">
-              <ul>
-            {% for flavor in beer.flavors.all %}
-            <li>{{ flavor.name }}</li>
-            {% endfor %}
-
-          </p>
-          </ul>
-          </div>
-        </div>
+      <div class="col">
+        <strong> {{ beer.name }} </strong>       
+        <p class="description" id="description">{{ beer.description }}</p>
+      </div>
+      
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        Rated something out of something
+        <a href="{% url 'beer_reviews' beer.slug %}">view reviews</a>
+        <a href="{% url 'beer_add_review' beer.slug %}">add a review</a>
       </div>
     </div>
-  </div>
-{% endblock %}
+    
+    <div class="row">
+      <div class="col-md-6">
+        <strong>Ingredients</strong><br>
+        <p id="ingredients">
+          {% for part in beer.ingredients.all %}
+            {{ part.name }}
+          {% endfor %}
+        </p>
+      </div>
+      <div class="col-md-6">
+        <strong>Tasting notes</strong>
+        <p id="flavours">
+          <ul>
+            {% for flavor in beer.flavors.all %}
+              <li>{{ flavor.name }}</li>
+            {% endfor %}
+          </p>
+        </ul>
+      </div>
+    </div>
+  {% endblock %}

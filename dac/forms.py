@@ -1,6 +1,6 @@
 from django import forms
 from registration.forms import RegistrationForm
-from dac.models import User,UserProfile,Business
+from dac.models import User,UserProfile,Business,Review
 
 
 class RegisterForm(RegistrationForm):
@@ -26,14 +26,17 @@ class BusinessForm(forms.ModelForm):
 
 	class Meta:
 		model=Business
-		exclude = ('beers','owner','slug')
+		fields = ('name','address','description')
 
 
 RATING_CHOICES = [("1","1: Very Poor"),("2","2"),("3","3"),("4","4"),("5","5: Excellent"),]
 
 class BeerReview(forms.ModelForm):
-	rating = forms.Select(choices=RATING_CHOICES)
-	pass
+	rating = forms.ChoiceField(help_text="rating",choices=RATING_CHOICES)
+	reivew = forms.Textarea()
 
+	class Meta:
+		model = Review
+		fields = ("rating","review")
 
 

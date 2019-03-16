@@ -63,12 +63,7 @@ class Beer(models.Model):
 		self.slug = slugify(self.name)
 		super(Beer, self).save(*args, **kwargs)
 
-class Review(models.Model):
-	rating = models.PositiveSmallIntegerField(default=1)
-	review = models.TextField(blank=False)
-	submitter = models.ForeignKey(User, on_delete=models.CASCADE)
-	flavors = models.ManyToManyField(Flavor)
-	beer = models.OneToOneField(Beer)
+
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
@@ -98,3 +93,9 @@ class Business(models.Model):
 	def __str__(self):
 		return self.name + " (" + self.address + ")"
 
+class Review(models.Model):
+	rating = models.PositiveSmallIntegerField(default=1)
+	review = models.TextField(blank=False)
+	submitter = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+	flavors = models.ManyToManyField(Flavor)
+	beer = models.OneToOneField(Beer)

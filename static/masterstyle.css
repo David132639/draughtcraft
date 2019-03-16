@@ -6,10 +6,10 @@
   margin-top: 20px;
 }
 
-/* descendant selector for form stuff */
-form * {
+.profile_img {
 
-
+	width: 27vw;
+	min-width: 30%;
 
 
 }
