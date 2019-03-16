@@ -87,7 +87,8 @@ def populate():
 				flavors["herbal"], flavors["piney"], flavors["med_bitter"]])
 
 	add_beer(name='Fraoch',
-				tagline='Heather Ale',
+				img_name = "default.jpg",
+                                tagline='Heather Ale',
 				description = 'The Original Craft Beer; brewed in Scotland \
 				since 2000 B.C. The Brotherhood have been guardians of the \
 				ancient Gaelic recipe for "Leann Fraoch" (Heather Ale) since \
@@ -105,6 +106,7 @@ def populate():
 				flavors["citrus"]])
 
 	add_beer(name='Birds & Bees',
+				img_name = "default.jpg",
 				tagline='Golden Summer Ale',
 				description = 'Brewed for the summer evenings when we down \
 				tools for the day and retire to the beer garden. This bright, \
@@ -115,7 +117,7 @@ def populate():
 				ibu=25,
 				og=1045,
 				calories=41,
-				flavors = [flavors["gold"], flavors["floral"],
+				flavors = [flavors["gold"],
 				flavors["zestya"], flavors["sweet"],
 				flavors["herbal"], flavors["honey"]])
 
