@@ -3,6 +3,8 @@
 	{{ user.username }}
 {% endblock %}
 {% block body_block %}
+{% load staticfiles %}
+<script src="{% static 'changeDisplayImage.js' %}"></script>
 	<!--needs some sort of menu thing to see the reviews the user has and stuff on this page somewhere-->
 	<div class="container w-100">
 		<div class="row">
@@ -11,7 +13,7 @@
 					<h1>Hey {{ user.username }}, please personalise your account</h1>
 				</div>
 				<div class="col-md-8">
-					<img src="{{ MEDIA_URL }}{{profile.avatar}}" class="float-left img-fluid profile_img"></img>
+					<img src="{{ MEDIA_URL }}{{profile.avatar}}" id="profileImg" class="float-left img-fluid profile_img"></img>
 				</div>
 			</div>
 		</div>

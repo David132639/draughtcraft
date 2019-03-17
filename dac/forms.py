@@ -29,6 +29,8 @@ class BusinessForm(forms.ModelForm):
 		fields = ('name','address','description')
 
 
+
+
 RATING_CHOICES = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),]
 
 class BeerReview(forms.ModelForm):
