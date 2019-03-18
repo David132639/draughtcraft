@@ -4,18 +4,19 @@
 	Add review - beer.slug
 {% endblock %}
 {% block body_block %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
 <script src="http://antenna.io/demo/jquery-bar-rating/jquery.barrating.js"></script>
 <link href="http://antenna.io/demo/jquery-bar-rating/dist/themes/fontawesome-stars.css" rel="stylesheet"/>
 <script src="{% static 'bar_rating.js' %}"></script>
+<script src="{% static 'auto.js' %}"></script>
 
 	<div class="jumbotron">
 		
 		{{user.username}}'s review of {{beer.name}}'
 	</div>
 	<div class="row">
-		<div class="col">
+		<div class="col ui-widget">
 			
 			<form  id="beer_review_form" method="post" action="{% url 'beer_add_review' beer.slug %}">
 				{% csrf_token %}

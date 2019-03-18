@@ -1,7 +1,6 @@
 from django import forms
 from registration.forms import RegistrationForm
 from dac.models import User,UserProfile,Business,Review,Beer
-from dal import autocomplete
 
 
 class RegisterForm(RegistrationForm):
@@ -35,12 +34,13 @@ class BusinessForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(BusinessForm, self).__init__(*args, **kwargs)
-		self.fields['stocks'].widget.attrs.update({'id':'beer_auto','autocomplete':'on'})
+		self.fields['stocks'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':"beers"})
 
 RATING_CHOICES = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),]
 
 class BeerReview(forms.ModelForm):
 	rating = forms.ChoiceField(help_text="rating",choices=RATING_CHOICES)
+	flavours = forms.CharField(help_text="flavour profile")
 	reivew = forms.Textarea()
 
 	class Meta:
@@ -51,5 +51,5 @@ class BeerReview(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(BeerReview, self).__init__(*args, **kwargs)
 		self.fields['rating'].widget.attrs.update({'id':'bar_rating'})
-
+		self.fields['flavours'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':'flavours'})
 

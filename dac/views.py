@@ -4,7 +4,7 @@ from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from dac.models import Beer, Business,UserProfile,Review
+from dac.models import Beer, Business,UserProfile,Review, Flavor
 from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
 import json
@@ -173,26 +173,30 @@ def user_details(request):
 	return render(request,'dac/userProfile.html',context_dict)
 
 
-def beer_api(request):
-	print("api call")
+def model_api(request,model_type):
+	#only allow queries in these models
+	allowed_models = {"beers":Beer,"flavours":Flavor}
+
 	#get query and get results
-	if request.is_ajax():
+	if request.is_ajax() and (model_type in allowed_models):
+		entity = allowed_models[model_type]
 		query = request.GET.get('term','')
-		beers = Beer.objects.filter(name__contains=query)[:10]
+		query_set = entity.objects.filter(name__contains=query)[:10]
 		results = []
 		#store as json like object
-		for i,beer in enumerate(beers):
-			beer_entry = {}
-			beer_entry["id"] = i
-			beer_entry["label"] = beer.name
-			beer_entry["value"]= beer.name
-			results.append(beer_entry)
+		for i,result in enumerate(query_set):
+			result_entry = {}
+			result_entry["id"] = i
+			result_entry["label"] = result.name
+			result_entry["value"]= result.name
+			results.append(result_entry)
 		data = json.dumps(results)
 	else:
 		data = 'fail'
 	mime = 'application/json'
 	print(data)
 	return HttpResponse(data,mime)
+
 
 @login_required
 def user_reviews(request):
