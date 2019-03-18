@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from dac.models import Beer, Business,UserProfile,Review
 from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
+import json
 
 
 # General site pages
@@ -170,6 +171,28 @@ def user_details(request):
 
 
 	return render(request,'dac/userProfile.html',context_dict)
+
+
+def beer_api(request):
+	print("api call")
+	#get query and get results
+	if request.is_ajax():
+		query = request.GET.get('term','')
+		beers = Beer.objects.filter(name__contains=query)[:10]
+		results = []
+		#store as json like object
+		for i,beer in enumerate(beers):
+			beer_entry = {}
+			beer_entry["id"] = i
+			beer_entry["label"] = beer.name
+			beer_entry["value"]= beer.name
+			results.append(beer_entry)
+		data = json.dumps(results)
+	else:
+		data = 'fail'
+	mime = 'application/json'
+	print(data)
+	return HttpResponse(data,mime)
 
 @login_required
 def user_reviews(request):

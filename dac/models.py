@@ -7,6 +7,9 @@ from os.path import join
 class User(AbstractUser):
 	is_business = models.BooleanField(default=False)
 
+	def __str__(self):
+		return self.username
+
 class Ingredient(models.Model):
 	MALTS = "MA"
 	HOPS = "HO"
@@ -24,6 +27,9 @@ class Ingredient(models.Model):
 		choices=INGREDIENT_CATEGORIES,
 		default=OTHER
 	)
+
+	def __str__(self):
+		return self.name
 
 class Flavor(models.Model):
 	BITTERNESS = "BI"
@@ -46,6 +52,9 @@ class Flavor(models.Model):
 		choices=FLAVOR_CATEGORIES
 	)
 
+	def __str__(self):
+		return self.name
+
 class Beer(models.Model):
 	name = models.CharField(max_length=30, unique=True)
 	tagline = models.CharField(max_length=128)
@@ -62,6 +71,9 @@ class Beer(models.Model):
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.name)
 		super(Beer, self).save(*args, **kwargs)
+
+	def __str__(self):
+		return self.name
 
 
 
@@ -99,3 +111,6 @@ class Review(models.Model):
 	submitter = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 	flavors = models.ManyToManyField(Flavor)
 	beer = models.ForeignKey(Beer)
+
+	def __str__(self):
+		return self.submitter.user.username

@@ -4,6 +4,7 @@
 {% endblock %}
 {% block body_block %}
 {% load staticfiles %}
+<script src="{% static 'beer_auto.js' %}"></script>
 <script src="{% static 'changeDisplayImage.js' %}"></script>
 	<!--needs some sort of menu thing to see the reviews the user has and stuff on this page somewhere-->
 	<div class="container w-100">
@@ -19,7 +20,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-4">
-				<div class="form-group" >
+				<div class="form-group ui-widget" >
 					<form class="form-inline" id="user_profile_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
 						<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
 						

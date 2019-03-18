@@ -8,6 +8,7 @@ from dac.views import UserRegistrationView
 
 
 urlpatterns = [
+url(r'^api/get_beers/$',views.beer_api,name="beer_api"),
 
 #beers
 url(r'^$', views.index, name='index'),
