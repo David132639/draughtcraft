@@ -1,6 +1,6 @@
 from django import forms
 from registration.forms import RegistrationForm
-from dac.models import User,UserProfile,Business,Review,Beer
+from dac.models import User,UserProfile,Business,Review,Beer,Flavor
 
 
 class RegisterForm(RegistrationForm):
@@ -32,9 +32,24 @@ class BusinessForm(forms.ModelForm):
 		model=Business
 		fields = ('name','address','description','stocks')
 
+	#override to set context for autocomplete input
 	def __init__(self, *args, **kwargs):
 		super(BusinessForm, self).__init__(*args, **kwargs)
 		self.fields['stocks'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':"beers"})
+
+	def save(self,commit=True):
+		business = super(BusinessForm,self).save(commit=False)
+		for beer in self.cleaned_data['stocks'].strip().split(','):
+			try:
+				print(beer)
+				business.beers.add(Beer.objects.get(name=beer))
+				print("added beer called: ",beer)
+			except Beer.DoesNotExist:
+				pass
+		if commit:
+			business.save()
+		return business
+
 
 RATING_CHOICES = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),]
 
@@ -47,9 +62,19 @@ class BeerReview(forms.ModelForm):
 		model = Review
 		fields = ("rating","review")
 
-	#force the select field to have a bar rating id
+	#override to set context for autocomplete input and for star rating bar
 	def __init__(self, *args, **kwargs):
 		super(BeerReview, self).__init__(*args, **kwargs)
 		self.fields['rating'].widget.attrs.update({'id':'bar_rating'})
 		self.fields['flavours'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':'flavours'})
-
+	
+	def save(self,commit=True):
+		review = super(BeerReview,self).save(commit=False)
+		for flavor in self.cleaned_data['flavours'].strip().split(','):
+			try:
+				review.flavors.add(Flavor.objects.get(name=flavor))
+			except Flavor.DoesNotExist:
+				pass
+		if commit:
+			review.save()
+		return review

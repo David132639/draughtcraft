@@ -30,6 +30,7 @@ def sitemap(request):
 def beers(request,beer_slug=None):
 	context_dict = {'beer': None,}
 
+	#none specific so just a load of beers and send to the user
 	if not beer_slug:
 		context_dict['beers'] = Beer.objects.all()
 		return render(request,'dac/beer_list.html',context_dict)
@@ -51,29 +52,29 @@ def add_beer_review(request,beer_slug):
 	edit = False
 	try:
 	#check if the user has already submitted a review
+	#pre populate form with previously submitted data
 		prev_review = Review.objects.get(submitter=profile,beer=beer)
-		form = BeerReview({'review':prev_review.review,"rating":prev_review.rating})
+		flavours = ", ".join([str(x)for x in prev_review.flavors.all()])
+		form = BeerReview({'review':prev_review.review,"rating":prev_review.rating,'flavours':flavours})
 		edit = True
 	except Review.DoesNotExist:
 	 	form = BeerReview()
 	context_dict = {'beer':beer,'form':form}
 
-
-	print(edit)
 	if request.method == "POST":
 		if edit:
 			form = BeerReview(request.POST,instance = prev_review)
 		else:
 			form = BeerReview(request.POST)
 		if form.is_valid():
+
+			#flavours parsed in form save
 			review = form.save(commit=False)
-			print(type(review.rating))
 			review.beer = beer
 			review.submitter = profile
 			review.save()
+			
 			return index(request)
-		#do the processing of the form later
-
 	return render(request,'dac/add_review.html',context_dict)
 
 
@@ -150,7 +151,9 @@ def user_details(request):
 			business = Business.objects.create(owner=profile)
 		else:
 			business = profile.business
-		business_form = BusinessForm({'name':business.name,'address':business.address,'description':business.description})
+		stocks = ",".join([str(x)for x in business.beers.all()])
+		business_form = BusinessForm({'name':business.name,'address':business.address,'description':business.description,
+			"stocks":stocks})
 		context_dict['forms'].append(business_form)
 	
 	if request.method == 'POST':
