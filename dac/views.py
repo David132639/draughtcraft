@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from dac.models import Beer, Business,UserProfile,Review, Flavor
 from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
+from dac.services import get_place_info
 import json
 
 
@@ -69,26 +70,18 @@ def add_beer_review(request,beer_slug):
 		else:
 			form = BeerReview(request.POST)
 		if form.is_valid():
-
-			#can probably modify save so that this works properly
-			
-			review = form.save(commit=False)
-			review.beer = beer
-			review.submitter = profile
-			review.save()
-
+			#set these fields in teh model, a little cleaner than doing this
+			#in teh view			
+			review = form.save(commit=True,beer=beer,profile=profile)
 			#must save before and after to satisfy many to many thing
 			#must modify cleaned data
 			review.flavors.clear()
-			for flavor in form.cleaned_data['flavours'].split(','):
+			for flavor in form.cleaned_data['flavours']:
 				try:
-
-					review.flavors.add(Flavor.objects.get(name=flavor.strip()))
+					review.flavors.add(Flavor.objects.get(name=flavor))
 				except Flavor.DoesNotExist:
 					pass
 			review.save()
-			
-			
 			return index(request)
 	return render(request,'dac/add_review.html',context_dict)
 
@@ -107,7 +100,11 @@ def pubs(request,pub_slug=None):
 
 	if not pub_slug:
 		return HttpResponse("print a whole load of pubs")
-	return HttpResponse("a specific pub"+pub_slug)
+	pub = Business.objects.get(slug=pub_slug)
+	context_dict["pub"] = pub
+
+
+	return render(request,'dac/pub.html',context_dict)
 
 def pubs_beers(request,pub_slug):
 	#return a list of the beers that the pub stocks
@@ -138,7 +135,6 @@ def search(request):
 class UserRegistrationView(RegistrationView):
 	def get_success_url(self, user):
 		'''send the user to setup their accounts other features'''
-		
 		return reverse('user_details')
 
 	def register(self,form):
@@ -178,6 +174,9 @@ def user_details(request):
 		#add the business form to the forms to be validated
 		if request.user.is_business:
 			business_form = BusinessForm(request.POST, request.FILES,instance=business)
+			google_addr = get_place_info(business_form.data["address"])
+			business.lat = google_addr["lat"]
+			business.lng =google_addr["lng"]
 			form_list.append(business_form)
 		
 		#check if all of teh forms are valid and then save
@@ -188,6 +187,20 @@ def user_details(request):
 
 
 	return render(request,'dac/userProfile.html',context_dict)
+
+
+def map_api(request,pub_slug):
+	if request.method != 'GET':
+		return  HttpResponse(status=405)
+
+	response = {}
+	mime = 'application/json'
+	pub = Business.objects.get(slug=pub_slug)
+	response["lng"] = pub.lng
+	response["lat"] = pub.lat
+
+	return HttpResponse(json.dumps(response),mime)
+
 
 
 def model_api(request,model_type):

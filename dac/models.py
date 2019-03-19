@@ -93,6 +93,10 @@ class Business(models.Model):
 	owner = models.OneToOneField(UserProfile, on_delete=models.CASCADE,
 		primary_key=True
 	)
+
+	lng = models.FloatField(null=True)
+	lat = models.FloatField(null=True)
+
 	beers = models.ManyToManyField(Beer)
 
 	class Meta:

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_-dk-4*ta+2r!)_k^dlxm)#%7a#u6a7s6&#943)$qi+!0uetey'
 
 # Google Places API key
-GOOGLE_PLACES_API_KEY = 'ayy boi'
+GOOGLE_PLACES_API_KEY = 'AIzaSyDhirIPKrHsY6xXlRXMHFehpFEflNAqrEU'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-#AUTOCOMPLETE LIGHT MUST BE FIRST
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

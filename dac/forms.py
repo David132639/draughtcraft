@@ -21,6 +21,9 @@ class UserProfileForm(forms.ModelForm):
 		super(UserProfileForm, self).__init__(*args, **kwargs)
 		self.fields['avatar'].widget.attrs.update({'type':'image','accept':'image/*'})
 
+
+
+
 class BusinessForm(forms.ModelForm):
 	name = forms.CharField(help_text="Business Name")
 	address = forms.CharField(help_text="Street address")
@@ -37,14 +40,21 @@ class BusinessForm(forms.ModelForm):
 		super(BusinessForm, self).__init__(*args, **kwargs)
 		self.fields['stocks'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':"beers"})
 
+	def clean(self):
+		cleaned_data = super(BusinessForm,self).clean()
+
+		if "stocks" in cleaned_data:
+			cleaned_data["stocks"] = [x.strip() for x in cleaned_data["stocks"].split(",")]
+
+		return cleaned_data
+
+
 	def save(self,commit=True):
 		business = super(BusinessForm,self).save(commit=False)
 		business.beers.clear()
-		for beer in self.cleaned_data['stocks'].strip().split(','):
+		for beer in self.cleaned_data['stocks']:
 			try:
-				print(beer)
-				business.beers.add(Beer.objects.get(name=beer.strip()))
-				print("added beer called: ",beer)
+				business.beers.add(Beer.objects.get(name=beer))
 			except Beer.DoesNotExist:
 				pass
 		if commit:
@@ -69,3 +79,21 @@ class BeerReview(forms.ModelForm):
 		super(BeerReview, self).__init__(*args, **kwargs)
 		self.fields['rating'].widget.attrs.update({'id':'bar_rating'})
 		self.fields['flavours'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':'flavours'})
+
+	def clean(self):
+		cleaned_data = super(BeerReview,self).clean()
+		if "flavours" in cleaned_data:
+			cleaned_data["flavours"] = [x.strip() for x in cleaned_data['flavours'].split(",")]
+		return cleaned_data
+
+	def save(self,commit=True,*args,**kwargs):
+		instance = super(BeerReview,self).save(commit=False)
+		if "profile" in kwargs:
+			instance.submitter = kwargs["profile"]
+		if "beer" in kwargs:
+			instance.beer = kwargs["beer"]
+
+		if commit:
+			instance.save()
+		return instance
+

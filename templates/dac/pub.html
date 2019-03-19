@@ -1,0 +1,32 @@
+{% extends 'dac/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+
+{{ pub.name }}
+
+{% endblock %}
+{% block body_block %}
+<script src="{% static 'map.js' %}"></script>
+
+<!-- this is the busniness details -->
+{{pub.name}} by {{pub.owner.user.username}} </br>
+{{pub.address}} </br>
+{{pub.description}}
+
+<!-- end of basic business details -->
+
+
+<!-- this is stuff realted to the google maps api -->
+<div id="map" data-name="{{pub.name}}"></div>
+
+
+
+
+<!--keep me before div map the bottom -->
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhirIPKrHsY6xXlRXMHFehpFEflNAqrEU&callback=initMap">
+    </script>
+
+<!--end of map stuff-->
+
+{% endblock %}
