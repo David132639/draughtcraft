@@ -39,10 +39,11 @@ class BusinessForm(forms.ModelForm):
 
 	def save(self,commit=True):
 		business = super(BusinessForm,self).save(commit=False)
+		business.beers.clear()
 		for beer in self.cleaned_data['stocks'].strip().split(','):
 			try:
 				print(beer)
-				business.beers.add(Beer.objects.get(name=beer))
+				business.beers.add(Beer.objects.get(name=beer.strip()))
 				print("added beer called: ",beer)
 			except Beer.DoesNotExist:
 				pass
@@ -58,23 +59,13 @@ class BeerReview(forms.ModelForm):
 	flavours = forms.CharField(help_text="flavour profile")
 	reivew = forms.Textarea()
 
+
 	class Meta:
 		model = Review
-		fields = ("rating","review")
+		fields = ("rating",'flavours',"review")
 
 	#override to set context for autocomplete input and for star rating bar
 	def __init__(self, *args, **kwargs):
 		super(BeerReview, self).__init__(*args, **kwargs)
 		self.fields['rating'].widget.attrs.update({'id':'bar_rating'})
 		self.fields['flavours'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':'flavours'})
-	
-	def save(self,commit=True):
-		review = super(BeerReview,self).save(commit=False)
-		for flavor in self.cleaned_data['flavours'].strip().split(','):
-			try:
-				review.flavors.add(Flavor.objects.get(name=flavor))
-			except Flavor.DoesNotExist:
-				pass
-		if commit:
-			review.save()
-		return review

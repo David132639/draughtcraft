@@ -55,6 +55,8 @@ def add_beer_review(request,beer_slug):
 	#pre populate form with previously submitted data
 		prev_review = Review.objects.get(submitter=profile,beer=beer)
 		flavours = ", ".join([str(x)for x in prev_review.flavors.all()])
+		print("flavours already in teh form",flavours)
+
 		form = BeerReview({'review':prev_review.review,"rating":prev_review.rating,'flavours':flavours})
 		edit = True
 	except Review.DoesNotExist:
@@ -68,11 +70,24 @@ def add_beer_review(request,beer_slug):
 			form = BeerReview(request.POST)
 		if form.is_valid():
 
-			#flavours parsed in form save
+			#can probably modify save so that this works properly
+			
 			review = form.save(commit=False)
 			review.beer = beer
 			review.submitter = profile
 			review.save()
+
+			#must save before and after to satisfy many to many thing
+			#must modify cleaned data
+			review.flavors.clear()
+			for flavor in form.cleaned_data['flavours'].split(','):
+				try:
+
+					review.flavors.add(Flavor.objects.get(name=flavor.strip()))
+				except Flavor.DoesNotExist:
+					pass
+			review.save()
+			
 			
 			return index(request)
 	return render(request,'dac/add_review.html',context_dict)
@@ -162,7 +177,6 @@ def user_details(request):
 
 		#add the business form to the forms to be validated
 		if request.user.is_business:
-			print("update attempt")
 			business_form = BusinessForm(request.POST, request.FILES,instance=business)
 			form_list.append(business_form)
 		
@@ -197,7 +211,6 @@ def model_api(request,model_type):
 	else:
 		data = 'fail'
 	mime = 'application/json'
-	print(data)
 	return HttpResponse(data,mime)
 
 
