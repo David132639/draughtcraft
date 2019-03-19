@@ -130,6 +130,7 @@ def populate():
 def add_ingredient(name, category):
 	i, created = Ingredient.objects.get_or_create(name=name, category=category)
 
+
 	print('- Ingredient: {0}, Created: {1}'.format(str(i), str(created)))
 	return i
 
@@ -172,5 +173,4 @@ if __name__ == '__main__':
 	from dac.models import User
 	from django.db import IntegrityError
 
-	populate()  # Call the populate function, which calls the
-				# add_genre and add_musician functions
+	populate()
