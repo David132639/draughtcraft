@@ -4,9 +4,10 @@ from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from dac.models import Beer, Business,UserProfile,Review
+from dac.models import Beer, Business,UserProfile,Review, Flavor
 from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
+import json
 
 
 # General site pages
@@ -29,12 +30,16 @@ def sitemap(request):
 def beers(request,beer_slug=None):
 	context_dict = {'beer': None,}
 
+	#none specific so just a load of beers and send to the user
 	if not beer_slug:
 		context_dict['beers'] = Beer.objects.all()
 		return render(request,'dac/beer_list.html',context_dict)
 
 	#an explicit beer slug has been passed so just get that beer specifically
 	beer = get_object_or_404(Beer,slug=beer_slug)
+	ratings = Review.objects.filter(beer=beer)
+	if ratings:
+		context_dict["avg"] = sum(rating.rating for rating in ratings)/len(ratings)
 	context_dict["beer"] = beer
 
 	return render(request,'dac/beer.html',context_dict)
@@ -44,25 +49,47 @@ def add_beer_review(request,beer_slug):
 	#basic form for user adding review to a specific beer
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	profile = UserProfile.objects.get(user=request.user)
+	edit = False
 	try:
 	#check if the user has already submitted a review
+	#pre populate form with previously submitted data
 		prev_review = Review.objects.get(submitter=profile,beer=beer)
-		form = BeerReview({'review':prev_review.review})
+		flavours = ", ".join([str(x)for x in prev_review.flavors.all()])
+		print("flavours already in teh form",flavours)
+
+		form = BeerReview({'review':prev_review.review,"rating":prev_review.rating,'flavours':flavours})
+		edit = True
 	except Review.DoesNotExist:
 	 	form = BeerReview()
 	context_dict = {'beer':beer,'form':form}
 
-
 	if request.method == "POST":
-		form = BeerReview(request.POST)
+		if edit:
+			form = BeerReview(request.POST,instance = prev_review)
+		else:
+			form = BeerReview(request.POST)
 		if form.is_valid():
+
+			#can probably modify save so that this works properly
+			
 			review = form.save(commit=False)
 			review.beer = beer
 			review.submitter = profile
 			review.save()
-			return index(request)
-		#do the processing of the form later
 
+			#must save before and after to satisfy many to many thing
+			#must modify cleaned data
+			review.flavors.clear()
+			for flavor in form.cleaned_data['flavours'].split(','):
+				try:
+
+					review.flavors.add(Flavor.objects.get(name=flavor.strip()))
+				except Flavor.DoesNotExist:
+					pass
+			review.save()
+			
+			
+			return index(request)
 	return render(request,'dac/add_review.html',context_dict)
 
 
@@ -131,30 +158,61 @@ def user_details(request):
 	#user account creaton stuff
 	profile = UserProfile.objects.get_or_create(user=request.user)[0]
 	profile_form = UserProfileForm({'avatar':profile.avatar})
-	context_dict = {"profile_form":profile_form,'profile':profile}
+	context_dict = {"forms":[profile_form],'profile':profile}
+	
 	if request.user.is_business:
+		#if the user is just registering
 		if not hasattr(profile,'business'):
-			business = Business.objects.create(name=request.user.username+"s business",owner=profile)
+			business = Business.objects.create(owner=profile)
 		else:
 			business = profile.business
-		business_form = BusinessForm({'name':business.name,'address':business.address,'description':business.description})
-		context_dict['business_form'] = business_form
+		stocks = ",".join([str(x)for x in business.beers.all()])
+		business_form = BusinessForm({'name':business.name,'address':business.address,'description':business.description,
+			"stocks":stocks})
+		context_dict['forms'].append(business_form)
 	
 	if request.method == 'POST':
 		profile_form = UserProfileForm(request.POST, request.FILES,instance=profile)
-		if profile_form.is_valid():
-			profile_form.save(commit=True)
-			return index(request)
-		else:
-			print(profile_form.errors)
+		form_list = [profile_form]
 
+		#add the business form to the forms to be validated
 		if request.user.is_business:
 			business_form = BusinessForm(request.POST, request.FILES,instance=business)
-			if business_form.is_valid():
-				business_form.save(commit=True)
-				return index(request)
+			form_list.append(business_form)
+		
+		#check if all of teh forms are valid and then save
+		if all([x.is_valid() for x in form_list]):
+			for form in form_list:
+				form.save(commit=True)
+			return index(request)
+
 
 	return render(request,'dac/userProfile.html',context_dict)
+
+
+def model_api(request,model_type):
+	#only allow queries in these models
+	allowed_models = {"beers":Beer,"flavours":Flavor}
+
+	#get query and get results
+	if request.is_ajax() and (model_type in allowed_models):
+		entity = allowed_models[model_type]
+		query = request.GET.get('term','')
+		query_set = entity.objects.filter(name__contains=query)[:10]
+		results = []
+		#store as json like object
+		for i,result in enumerate(query_set):
+			result_entry = {}
+			result_entry["id"] = i
+			result_entry["label"] = result.name
+			result_entry["value"]= result.name
+			results.append(result_entry)
+		data = json.dumps(results)
+	else:
+		data = 'fail'
+	mime = 'application/json'
+	return HttpResponse(data,mime)
+
 
 @login_required
 def user_reviews(request):

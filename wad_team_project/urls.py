@@ -24,6 +24,8 @@ from django.conf import settings
 
 
 urlpatterns = [
+    #api for autocomplete
+    
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^draughtandcraft/', include('dac.urls')),

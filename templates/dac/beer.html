@@ -7,22 +7,27 @@
   <div class="container w-100">
     <div class="row">
       <div class="col">
-        <img class="" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
+        <img class="beer_image" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
       </div>
       <div class="col">
-        <strong> {{ beer.name }} </strong>       
+        <strong> {{ beer.name }} </strong>
         <p class="description" id="description">{{ beer.description }}</p>
       </div>
-      
     </div>
     <div class="row">
       <div class="col-md-12">
-        Rated something out of something
-        <a href="{% url 'beer_reviews' beer.slug %}">view reviews</a>
-        <a href="{% url 'beer_add_review' beer.slug %}">add a review</a>
+        {% if avg %}
+          Rated {{avg|floatformat:-2}} out of 5
+          <a href="{% url 'beer_reviews' beer.slug %}">view reviews</a>
+          or
+        {% else %}
+          No reviews yet...
+        {% endif %}
+        {% if user.is_authenticated %}
+          <a href="{% url 'beer_add_review' beer.slug %}">add your own</a>
+        {% endif %}
       </div>
     </div>
-    
     <div class="row">
       <div class="col-md-6">
         <strong>Ingredients</strong><br>

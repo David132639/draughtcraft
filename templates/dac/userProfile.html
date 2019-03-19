@@ -3,6 +3,9 @@
 	{{ user.username }}
 {% endblock %}
 {% block body_block %}
+{% load staticfiles %}
+<script src="{% static 'auto.js' %}"></script>
+<script src="{% static 'changeDisplayImage.js' %}"></script>
 	<!--needs some sort of menu thing to see the reviews the user has and stuff on this page somewhere-->
 	<div class="container w-100">
 		<div class="row">
@@ -11,40 +14,30 @@
 					<h1>Hey {{ user.username }}, please personalise your account</h1>
 				</div>
 				<div class="col-md-8">
-					<img src="{{ MEDIA_URL }}{{profile.avatar}}" class="float-left img-fluid profile_img"></img>
+					<img src="{{ MEDIA_URL }}{{profile.avatar}}" id="profileImg" class="float-left img-fluid profile_img"></img>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-4">
-				<div class="form-group" >
+				<div class="form-group ui-widget" >
 					<form class="form-inline" id="user_profile_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
-						{% csrf_token %}
-						{% for hidden in profile_form.hidden_fields %}
-							{{ hidden }}
-						{% endfor %}
-						{% for field in profile_form.visible_fields %}
-							{{ field.errors }}
-							{{ field.help_text }}
-							{{ field }}
-						{% endfor %}
 						<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
-					</form>
-					{% if business_form %}
-						<strong>Business information</strong>
-						<form class="" id="business_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
-							{% csrf_token %}
-							{% for hidden in business_form.hidden_fields %}
+						
+						{% csrf_token %}
+						{% for form in forms %}
+							
+							{% for hidden in form.hidden_fields %}
 								{{ hidden }}
 							{% endfor %}
-							{% for field in business_form.visible_fields %}
+							{% for field in form.visible_fields %}
+								{{ field.errors }}
 								{{ field.help_text }}
 								{{ field }}
-								<br/>
 							{% endfor %}
-							<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
-						</form>
-					{% endif %}
+						{% endfor %}
+						
+					</form>
 				</div>
 			</div>
 		</div>
