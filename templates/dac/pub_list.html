@@ -1,0 +1,40 @@
+{% extends 'dac/base.html' %}
+{% load staticfiles %}
+{% block title_block%}
+  List of Businesses
+{% endblock %}
+{% block body_block %}
+<div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4"><h2><u>Business Accounts</u></h2> </div>
+           </div>
+           <div class="row justify-content-center">
+               
+               <div class="col-md-5">
+                   
+                   
+                        {% for pub in business %}
+                        <div class="row">
+                            <div class="col-sm-4">
+                                    <img class="img-thumbnail" src="{{ MEDIA_URL }}{{ business.image }}" alt="an image of {{ business.name }}">
+                                    
+                        </div>
+                        <div class="col-sm-8">
+                                <a href="{% url 'beers' business.slug %}"> {{ business.name }}
+                                        {{ business.address }}</a> 
+                                       <p>{{ business.description }}</p>
+                                              
+                            </div>
+                         
+                            {% endfor %}
+                 
+
+                    </div>
+                        
+              
+
+                </div>
+               
+      </div>
+
+{% endblock %}
