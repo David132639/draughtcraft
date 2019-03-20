@@ -29,6 +29,7 @@ url(r'^pubs/(?P<pub_slug>[\w\-]+)/beers/$', views.pubs_beers, name='pubs_stocks'
 url(r'^search/(?P<query_string>[\w\-]+)/$',views.search,name='search'),
 url(r'^sitemap/$',views.sitemap,name='sitemap'),
 url(r'^about/$',views.about,name='about'),
+url(r'^privacy/$',views.privacy,name='privacy'),
 
 
 #accounts, replaced with redux backend, seperate actual logic of app from redux

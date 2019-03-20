@@ -118,6 +118,10 @@ def pubs_beers(request,pub_slug):
 def about(request):
 	return render(request,'dac/about.html')
 
+
+def privacy(request):
+	return render(request,'dac/privacy.html')
+
 #searching stuff
 
 def search(request):
