@@ -25,7 +25,7 @@ def index(request):
 	return render(request, 'dac/index.html', context=context_dict)
 
 def sitemap(request):
-	return HttpResponse("A sitemap")
+	return render(request,'dac/sitemap.html')
 
 
 #beer stuff
@@ -235,7 +235,7 @@ def user_reviews(request):
 	context_dict = {'reviews':None}
 	#get all the reviews from the current user
 	user = UserProfile.objects.get(user=request.user)
-	context_dict['reviews'] = Reviews.objects.filter(submitter=user)
+	context_dict['reviews'] = Review.objects.filter(submitter=user)
 	render(request,'dac/user_reviews.html',context_dict)
 	pass
 
