@@ -1,17 +1,8 @@
 
-
-
-
-
-
-
 function displayMap(long,lats) {
-  // The location of Uluru
   var coords = {lat: lats, lng: long};
-  // The map, centered at Uluru
   var map = new google.maps.Map(
-      document.getElementById('map'), {zoom: 4, center: coords});
-  // The marker, positioned at Uluru
+      document.getElementById('map'), {zoom: 15, center: coords});
   var marker = new google.maps.Marker({position: coords, map: map});
 }
 
@@ -24,8 +15,6 @@ function initMap(){
 
 		if(paramReq.readyState==4 && paramReq.status==200){
 			var response = JSON.parse(paramReq.responseText)
-			alert(response["lng"])
-			alert(response["lat"])
 			displayMap(response["lng"],response["lat"])
 		}
 	}

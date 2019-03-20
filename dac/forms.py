@@ -12,14 +12,14 @@ class RegisterForm(RegistrationForm):
 	pass
 
 class UserProfileForm(forms.ModelForm):
-	avatar = forms.ImageField(help_text='profile image',required=False,)
+	image = forms.ImageField(help_text='profile image',required=False,)
 	class Meta:
 		model = UserProfile
-		fields = ('avatar',)
+		fields = ('image',)
 	#overrride only allow images
 	def __init__(self, *args, **kwargs):
 		super(UserProfileForm, self).__init__(*args, **kwargs)
-		self.fields['avatar'].widget.attrs.update({'type':'image','accept':'image/*'})
+		self.fields['image'].widget.attrs.update({'type':'image','accept':'image/*'})
 
 
 
@@ -65,6 +65,7 @@ class BusinessForm(forms.ModelForm):
 RATING_CHOICES = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),]
 
 class BeerReview(forms.ModelForm):
+	image = forms.ImageField(help_text='Image of your beer',required=False,)
 	rating = forms.ChoiceField(help_text="rating",choices=RATING_CHOICES)
 	flavours = forms.CharField(help_text="flavour profile")
 	reivew = forms.Textarea()
@@ -79,6 +80,7 @@ class BeerReview(forms.ModelForm):
 		super(BeerReview, self).__init__(*args, **kwargs)
 		self.fields['rating'].widget.attrs.update({'id':'bar_rating'})
 		self.fields['flavours'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':'flavours'})
+		self.fields['image'].widget.attrs.update({'type':'image','accept':'image/*'})
 
 	def clean(self):
 		cleaned_data = super(BeerReview,self).clean()

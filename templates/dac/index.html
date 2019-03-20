@@ -32,7 +32,7 @@
             <!--django bar stuff in here-->
             {% if business %}
               {% for pub in business %}
-                {{ pub.name }}
+                <a href="{% url 'pubs' pub.slug %}"> {{ pub.name }}</a>
                 {{ pub.description }}<br/>
               {% endfor %}
             {% else %}

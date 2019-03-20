@@ -16,7 +16,8 @@ def index(request):
 	context_dict = {"beers":None,"business":None}
 
 	#get top three rated beers but not implemented yet
-	beers = Beer.objects.all()[:3]
+	beers = sorted(Beer.objects.all(),key=lambda x: x.get_review_average(),reverse=True)[:3]
+	print(beers)
 	business = Business.objects.all()[:3]
 	context_dict["business"] = business
 	context_dict["beers"] = beers
@@ -38,9 +39,9 @@ def beers(request,beer_slug=None):
 
 	#an explicit beer slug has been passed so just get that beer specifically
 	beer = get_object_or_404(Beer,slug=beer_slug)
-	ratings = Review.objects.filter(beer=beer)
-	if ratings:
-		context_dict["avg"] = sum(rating.rating for rating in ratings)/len(ratings)
+	avg = beer.get_review_average()
+	if avg != -1:
+		context_dict["avg"] = avg
 	context_dict["beer"] = beer
 
 	return render(request,'dac/beer.html',context_dict)
@@ -69,12 +70,9 @@ def add_beer_review(request,beer_slug):
 			form = BeerReview(request.POST,instance = prev_review)
 		else:
 			form = BeerReview(request.POST)
-		if form.is_valid():
-			#set these fields in teh model, a little cleaner than doing this
-			#in teh view			
+		if form.is_valid():			
 			review = form.save(commit=True,beer=beer,profile=profile)
-			#must save before and after to satisfy many to many thing
-			#must modify cleaned data
+			#must save before and after to satisfy many to many relationship
 			review.flavors.clear()
 			for flavor in form.cleaned_data['flavours']:
 				try:
@@ -88,9 +86,14 @@ def add_beer_review(request,beer_slug):
 
 def beers_reviews(request,beer_slug):
 	context_dict = {}
-	#get the reviews associated with the beer and return the stuff
-	#use same template as pub reviews
-	return HttpResponse("not implemented")
+	beer = get_object_or_404(Beer,slug=beer_slug)
+	context = beer.name
+	reviews = Review.objects.filter(beer=beer)
+
+	context_dict["beer"] = context
+	context_dict["reviews"] = reviews
+
+	return render(request,'dac/review_list.html',context_dict)
 
 
 #pub stuff
@@ -107,16 +110,9 @@ def pubs(request,pub_slug=None):
 	return render(request,'dac/pub.html',context_dict)
 
 def pubs_beers(request,pub_slug):
-	#return a list of the beers that the pub stocks
-	return HttpResponse("not implemented")
-
-
-def pub_reviews(request,pub_slug):
-	context_dict = {}
-
-	#get the reviews associated with the pub and return
-	#use same template as pub reviews
-	return HttpResponse("not implemented yet")
+	pub = Business.objects.get(slug=pub_slug)
+	context_dict["pub"] = pub
+	return render(request,'dac/pub_stocks.html',context_dict)
 
 
 def about(request):
@@ -153,7 +149,7 @@ class UserRegistrationView(RegistrationView):
 def user_details(request):
 	#user account creaton stuff
 	profile = UserProfile.objects.get_or_create(user=request.user)[0]
-	profile_form = UserProfileForm({'avatar':profile.avatar})
+	profile_form = UserProfileForm({'image':profile.image})
 	context_dict = {"forms":[profile_form],'profile':profile}
 	
 	if request.user.is_business:
@@ -233,7 +229,7 @@ def user_reviews(request):
 	#get all the reviews from the current user
 	user = UserProfile.objects.get(user=request.user)
 	context_dict['reviews'] = Reviews.objects.filter(submitter=user)
-	HttpResponse("needs a page")
+	render(request,'dac/user_reviews.html',context_dict)
 	pass
 
 def restricted(request):

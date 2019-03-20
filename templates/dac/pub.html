@@ -13,6 +13,13 @@
 {{pub.address}} </br>
 {{pub.description}}
 
+
+{% for beer in pub.stocks %}
+
+{{beer.name}}
+
+{% endfor %}
+
 <!-- end of basic business details -->
 
 

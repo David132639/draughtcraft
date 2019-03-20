@@ -72,6 +72,8 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -87,6 +89,10 @@ TEMPLATES = [
                 'django.template.context_processors.media',
 
             ],
+            'libraries':{
+            'dac_extras': 'templatetags.dac_extras',
+            }
+
         },
     },
 ]
