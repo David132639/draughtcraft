@@ -90,7 +90,7 @@ def beers_reviews(request,beer_slug):
 	context = beer.name
 	reviews = Review.objects.filter(beer=beer)
 
-	context_dict["beer"] = context
+	context_dict["context"] = context
 	context_dict["reviews"] = reviews
 
 	return render(request,'dac/review_list.html',context_dict)
