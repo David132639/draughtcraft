@@ -68,6 +68,13 @@ class Beer(models.Model):
 
 	ingredients = models.ManyToManyField(Ingredient)
 	flavors = models.ManyToManyField(Flavor)
+	
+	def get_review_average(self):
+		ratings = Review.objects.filter(beer=self)
+		if ratings:
+			return sum(rating.rating for rating in ratings)/len(ratings)
+		return -1
+
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.name)
 		super(Beer, self).save(*args, **kwargs)
@@ -79,7 +86,7 @@ class Beer(models.Model):
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
-	avatar = models.ImageField(upload_to='profile_images',default='profile_images/default.png')
+	image = models.ImageField(upload_to='profile_images',default='profile_images/default.png')
 	
 
 	def __str__(self):
@@ -93,6 +100,10 @@ class Business(models.Model):
 	owner = models.OneToOneField(UserProfile, on_delete=models.CASCADE,
 		primary_key=True
 	)
+
+	lng = models.FloatField(null=True)
+	lat = models.FloatField(null=True)
+
 	beers = models.ManyToManyField(Beer)
 
 	class Meta:
@@ -108,6 +119,7 @@ class Business(models.Model):
 class Review(models.Model):
 	rating = models.PositiveSmallIntegerField(default=1)
 	review = models.TextField(blank=False)
+	avatar = models.ImageField(upload_to='review_images',default='review_images/default.png')
 	submitter = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 	flavors = models.ManyToManyField(Flavor)
 	beer = models.ForeignKey(Beer)

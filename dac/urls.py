@@ -7,6 +7,8 @@ from dac.views import UserRegistrationView
 #if successful at logging
 
 urlpatterns = [
+#ajax stuff to support maps and autocomplete
+url(r'^api/mapApi/(?P<pub_slug>[\w\-]+)/$',views.map_api,name="map_api"),
 url(r'^api/(?P<model_type>[\w\-]+)/$',views.model_api,name="model_api"),
 
 #beers
@@ -25,6 +27,7 @@ url(r'^pubs/(?P<pub_slug>[\w\-]+)/beers/$', views.pubs_beers, name='pubs_stocks'
 url(r'^search/(?P<query_string>[\w|\W]+)/$',views.search,name='search'),
 url(r'^sitemap/$',views.sitemap,name='sitemap'),
 url(r'^about/$',views.about,name='about'),
+url(r'^privacy/$',views.privacy,name='privacy'),
 
 
 #accounts, replaced with redux backend, seperate actual logic of app from redux

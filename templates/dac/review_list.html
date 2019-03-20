@@ -1,0 +1,46 @@
+{% extends 'dac/base.html' %}
+
+{% block title_block %}
+
+Reviews - {{context}}
+
+{% endblock %}
+
+{% block body_block %}
+
+<div class="jumbotron"> <h1>
+
+{% if context == user.username %}
+	My reviews
+{% else %}
+	Reviews for {{context}}
+{% endif %}
+</h1></div>
+
+<div class="container-fluid w-100">
+
+<!-- catch if the user manually enters review url with no reviews -->
+{% if reviews|length == 0 %}
+
+No reviews yet :(
+
+{% else %}
+
+
+{% for review in reviews %}
+
+<div class="container">
+	<img class="img-thumbnail img-fluid review_image" src="{{MEDIA_URL}}{{review.submitter.image}}">
+
+
+
+</div>
+
+{% endfor %}
+
+
+{% endif %}
+
+
+</div>
+{% endblock %}

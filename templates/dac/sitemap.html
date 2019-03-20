@@ -1,0 +1,52 @@
+{% extends 'dac/base.html' %}
+
+{% block title_block %}
+Sitemap
+{% endblock %}
+
+{% block body_block %}
+
+<div class="jumbotron">
+	<h1>Sitemap</h1>
+</div>
+
+
+<div class="container w-100">
+	<ul>
+		<li><a href="{% url 'index' %}">Home</a></li>
+		<li><a href="{% url 'beers' %}">Beers</a></li>
+		<ul>
+			<li><a href="{% url 'beers' %}">Beers</a>/specific_beer</li>
+			<ul>
+				<li><a href="{% url 'beers' %}">Beers</a>/specific_beer/add_review</li>
+				<li><a href="{% url 'beers' %}">Beers</a>/specific_beer/view_reviews
+				</li>
+			</ul>
+		</ul>
+		<li><a href="{% url 'pubs' %}">Pubs</a></li>
+		<ul>
+			<li><a href="{% url 'pubs' %}">Beers</a>/specific_pub</li>
+			<ul>
+				<li><a href="{% url 'pubs' %}">pubs</a>/specific_pub/beers</li>
+			</ul>
+		</ul>
+
+
+		<li><a href="{% url 'auth_login' %}">Login</a></li>
+		<li><a href="{% url 'registration_register' %}">Register</a></li>
+		<li><a href="{% url 'user_details' %}">account/details</a></li>
+		<li><a href="{% url 'reviews' %}">accounts/reviews</a></li>
+
+
+		<li><a href="{% url 'sitemap' %}">Sitemap</a></li>
+		<li><a href="{% url 'about' %}">About</a></li>
+		<li><a href="{% url 'privacy' %}">Privacy</a></li>
+
+
+
+	</ul>
+
+</div>
+
+{% endblock %}
+

@@ -1,23 +1,25 @@
- body {
-   margin-top: 100px;
-   margin-bottom: 70px;
- }
+body {
+  margin-top: 100px;
+  margin-bottom: 70px;
+}
 
 .btn-primary {
   margin-top: 20px;
 }
 
 .profile_img {
+  width: 27vw;
+  min-width: 30%;
+}
 
-	width: 27vw;
-	min-width: 30%;
-
-
+#map {
+  height: 400px;  /* The height is 400 pixels */
+  width: 100%;  /* The width is the width of the web page */
 }
 
 .hide{
-	display: none;
-}
+  display: none;
+  }
 
 .beer_image{
   max-height: 200px;
@@ -26,7 +28,7 @@
   margin-right: auto;
 }
 
- .beer_thumbnail{
+.beer_thumbnail{
   max-height: 150px;
   display: block;
   margin-left: auto;
@@ -38,5 +40,11 @@
 }
 
 /* .list_item{
-  height: 25%;
+height: 25%;
 } */
+
+h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
