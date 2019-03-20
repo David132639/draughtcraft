@@ -126,10 +126,12 @@ def about(request):
 	return render(request,'dac/about.html')
 
 #searching stuff
-
-def search(request):
-	HttpResponse("not implemented")
-	pass
+def search(request, query_string):
+	beers = Beer.objects.filter(name__icontains=query_string) | Beer.objects.filter(description__icontains=query_string)
+	businesses = Business.objects.filter(name__icontains=query_string)
+	
+	context_dict = {"business" : businesses, "beers": beers, "query": query_string}
+	return render(request, 'dac/search_results.html', context_dict)
 
 #account functionality
 

@@ -1,0 +1,14 @@
+{% extends 'dac/base.html' %}
+{% load staticfiles %}
+{% block title_block%}
+  Results for {{ query }}
+{% endblock %}
+{% block body_block %}
+<div class="container">
+    <h1>Search results for <em>{{ query }}</em></h1>
+    {% include "dac/beer_results.html" with beers=beers %}
+    {% include "dac/pub_results.html" with business=business %}
+</div>
+           
+
+{% endblock %}
