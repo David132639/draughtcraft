@@ -19,11 +19,12 @@
         {% if avg %}
           Rated {{avg|floatformat:-2}} out of 5
           <a href="{% url 'beer_reviews' beer.slug %}">view reviews</a>
-          or
+          
         {% else %}
           No reviews yet...
         {% endif %}
         {% if user.is_authenticated %}
+        or
           <a href="{% url 'beer_add_review' beer.slug %}">add your own</a>
         {% endif %}
       </div>

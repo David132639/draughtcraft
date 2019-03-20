@@ -67,14 +67,3 @@ def get_image_from_address(address,filename):
         return True
     else:
         return False
-
-
-
-
-if __name__ == '__main__':
-    settings.configure()
-    # place_info = get_place_info("eiffel tower, paris")
-    # if place_info:
-    #     print(get_image_reference(place_info["place id"]))
-
-    get_image_from_address("tower of london","img.bmp")

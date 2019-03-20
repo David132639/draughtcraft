@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load dac_extras %}
 <script src="{% static 'reading.js' %}"></script>
     <div class="container w-100">
         <div class="row justify-content-center">
@@ -13,11 +14,11 @@
                 <div class="col-md-8">
                     <a href="{% url 'beers' beer.slug %}"> {{ beer.name }}
                     {{ beer.tagline }}</a>
-                    <p>{{ beer.description|slice:"250" }}
-                    {% if beer.description|length > 250 %}
+                    <p>{{ beer.description|getShort }}
+                    {% if beer.description|getLong %}
                         <a href="#" class="read-more">read more</a>
                         <span class="hide">
-                        {{beer.description|slice:"250:"}}
+                        {{beer.description|getLong}}
                         <a href="#" class="read-less">read less</a>
                         </span>
                     {% endif %}

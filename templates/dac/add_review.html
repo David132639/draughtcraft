@@ -4,25 +4,28 @@
 	Add review - beer.slug
 {% endblock %}
 {% block body_block %}
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
-<script src="{% static 'changeDisplayImage.js' %}"></script>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-<script src="http://antenna.io/demo/jquery-bar-rating/jquery.barrating.js"></script>
-<link href="http://antenna.io/demo/jquery-bar-rating/dist/themes/fontawesome-stars.css" rel="stylesheet"/>
-<script src="{% static 'bar_rating.js' %}"></script>
-<script src="{% static 'auto.js' %}"></script>
-
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+	<script src="{% static 'changeDisplayImage.js' %}"></script>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+	<script src="http://antenna.io/demo/jquery-bar-rating/jquery.barrating.js"></script>
+	<link href="http://antenna.io/demo/jquery-bar-rating/dist/themes/fontawesome-stars.css" rel="stylesheet"/>
+	<script src="{% static 'bar_rating.js' %}"></script>
+	<script src="{% static 'auto.js' %}"></script>
+	
+	
 	<div class="jumbotron">
-		
-		{{user.username}}'s review of {{beer.name}}'
+		<h1>{{user.username}}'s review of {{beer.name}}</h1>
 	</div>
-	<div class="row">
-		<div class="col ui-widget">
+	
+	<div class="container w-100  col-md-3">
+		<div class="form-group column ui-widget">
 			
 			<!--change the displayed image when the user updates the image-->
 			
-			<img id="displayImg" class="profile_image" src="">
-
+			<div class="row">
+				<img id="displayImg" class="profile_image" src="">
+			</div>
+			
 			<form  id="beer_review_form" method="post" action="{% url 'beer_add_review' beer.slug %}">
 				{% csrf_token %}
 				{% for hidden in form.hidden_fields %}
@@ -34,7 +37,7 @@
 					{{ field }}
 				{% endfor %}
 				<input class="btn btn-primary" type="submit" name="submit" value="Submit reivew" />
-
-			</div>
+			</form>
 		</div>
-	{% endblock %}
+	</div>
+{% endblock %}

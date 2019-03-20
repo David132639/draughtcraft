@@ -31,8 +31,10 @@
 								{{ hidden }}
 							{% endfor %}
 							{% for field in form.visible_fields %}
-								{{ field.errors }}
+								
 								{{ field.help_text }}
+								{{ field.errors }}
+								
 								{{ field }}
 							{% endfor %}
 						{% endfor %}

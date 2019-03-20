@@ -42,6 +42,8 @@ def beers(request,beer_slug=None):
 	avg = beer.get_review_average()
 	if avg != -1:
 		context_dict["avg"] = avg
+	context_dict["stockists"] = Business.objects.filter(beers__in=[beer])
+	print(context_dict["stockists"])
 	context_dict["beer"] = beer
 
 	return render(request,'dac/beer.html',context_dict)
