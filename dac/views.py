@@ -191,7 +191,10 @@ def map_api(request,pub_slug):
 
 	response = {}
 	mime = 'application/json'
-	pub = Business.objects.get(slug=pub_slug)
+	try:
+		pub = Business.objects.get(slug=pub_slug)
+	except Business.DoesNotExist:
+		return HttpResponse(status=404)
 	response["lng"] = pub.lng
 	response["lat"] = pub.lat
 

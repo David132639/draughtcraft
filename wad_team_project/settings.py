@@ -89,9 +89,6 @@ TEMPLATES = [
                 'django.template.context_processors.media',
 
             ],
-            'libraries':{
-            'dac_extras': 'templatetags.dac_extras',
-            }
 
         },
     },
