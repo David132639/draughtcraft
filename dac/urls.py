@@ -2,12 +2,9 @@ from django.conf.urls import url,include
 from dac import views
 from dac.views import UserRegistrationView
 
-'''List reviews and pubs subject to change'''
-# Create a new class that redirects the user to the index page,
-#if successful at logging
 
 urlpatterns = [
-#ajax stuff to support maps and autocomplete
+#ajax to support maps and autocomplete
 url(r'^api/mapApi/(?P<pub_slug>[\w\-]+)/$',views.map_api,name="map_api"),
 url(r'^api/(?P<model_type>[\w\-]+)/$',views.model_api,name="model_api"),
 
@@ -36,5 +33,4 @@ url(r'^accounts/', include('registration.backends.simple.urls')),
 
 url(r'^accounts/reviews/$', views.user_reviews, name='reviews'),
 url(r'^accounts/details/$',views.user_details,name='user_details'),
-url(r'^restricted/$', views.restricted, name='restricted'),
 ]

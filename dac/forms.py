@@ -4,7 +4,7 @@ from dac.models import User,UserProfile,Business,Review,Beer,Flavor
 
 
 class RegisterForm(RegistrationForm):
-	'''custom register form for businesses'''
+	'''custom register form for businesses functionality'''
 	is_business = forms.BooleanField(label="Business User",initial=False,required=False)
 	class Meta:
 		fields = ('username','is_business','email','password1','password2')

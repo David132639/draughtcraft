@@ -14,8 +14,10 @@ import json
 
 # General site pages
 def index(request):
-	context_dict = {"beers":None,"business":None}
+	'''Returns the index page of the site, and the top three beers sorted by review average
+	and the top pubs sortd by the number of beers that they stock'''
 
+	context_dict = {"beers":None,"business":None}
 	#get top three rated beers but not implemented yet
 	beers = sorted(Beer.objects.all(),key=lambda x: x.get_review_average(),reverse=True)[:3]
 	print(beers)
@@ -26,11 +28,15 @@ def index(request):
 	return render(request, 'dac/index.html', context=context_dict)
 
 def sitemap(request):
+	'''Returns the sitemap for the site'''
 	return render(request,'dac/sitemap.html')
 
 
 #beer stuff
 def beers(request,beer_slug=None):
+	'''Returns a specified beer if a beer slug is passed otherwise returns a list of beers
+	in no particular order'''
+
 	context_dict = {'beer': None,}
 
 	#none specific so just a load of beers and send to the user
@@ -41,8 +47,12 @@ def beers(request,beer_slug=None):
 	#an explicit beer slug has been passed so just get that beer specifically
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	avg = beer.get_review_average()
+
+	#-1 if the beer has no reviews
 	if avg != -1:
 		context_dict["avg"] = avg
+
+	#find all the places where this beer is stocked and return the reponse object
 	context_dict["stockists"] = Business.objects.filter(beers__in=[beer])
 	print(context_dict["stockists"])
 	context_dict["beer"] = beer
@@ -51,6 +61,10 @@ def beers(request,beer_slug=None):
 
 @login_required
 def add_beer_review(request,beer_slug):
+	'''Returns a form for submitting a beer review for the specified beer
+	pre populates with a previous review if it already exists'''
+
+
 	#basic form for user adding review to a specific beer
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	profile = UserProfile.objects.get(user=request.user)
@@ -61,7 +75,6 @@ def add_beer_review(request,beer_slug):
 		prev_review = Review.objects.get(submitter=profile,beer=beer)
 		flavours = ", ".join([str(x)for x in prev_review.flavors.all()])
 		print("flavours already in teh form",flavours)
-
 		form = BeerReview({'review':prev_review.review,"rating":prev_review.rating,'flavours':flavours})
 		edit = True
 	except Review.DoesNotExist:
@@ -70,6 +83,7 @@ def add_beer_review(request,beer_slug):
 
 	if request.method == "POST":
 		if edit:
+			#if we are updating, update the existing model
 			form = BeerReview(request.POST,request.FILES,instance = prev_review)
 		else:
 			form = BeerReview(request.POST,request.FILES)
@@ -77,6 +91,9 @@ def add_beer_review(request,beer_slug):
 			review = form.save(commit=True,beer=beer,profile=profile)
 			#must save before and after to satisfy many to many relationship
 			review.image = form.cleaned_data["image"]
+			
+			#allow the user to add as well as remove flavours from their
+			#perceived flavour profile
 			review.flavors.clear()
 			for flavor in form.cleaned_data['flavours']:
 				try:
@@ -89,6 +106,7 @@ def add_beer_review(request,beer_slug):
 
 
 def beers_reviews(request,beer_slug):
+	'''Returns all of the reviews for a specified beer'''
 	context_dict = {}
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	context = beer.name
@@ -100,9 +118,12 @@ def beers_reviews(request,beer_slug):
 	return render(request,'dac/review_list.html',context_dict)
 
 
-#pub stuff
+#pub views
 
 def pubs(request,pub_slug=None):
+	'''returns a list of pubs if no slug is passed in, otherwise returns a specific
+	pub'''
+
 	context_dict = {}
 
 	if not pub_slug:
@@ -115,20 +136,25 @@ def pubs(request,pub_slug=None):
 	return render(request,'dac/pub.html',context_dict)
 
 def pubs_beers(request,pub_slug):
+	'''returns the beers a specific pub stocks'''
 	pub = Business.objects.get(slug=pub_slug)
 	context_dict["pub"] = pub
 	return render(request,'dac/pub_stocks.html',context_dict)
 
 
 def about(request):
+	'''returns the about page'''
 	return render(request,'dac/about.html')
 
 
 def privacy(request):
+	'''Returns a page containing the privacy policy'''
 	return render(request,'dac/privacy.html')
 
 #searching stuff
 def search(request, query_string):
+	'''Returns a page of search results for a given query string'''
+
 	beers = Beer.objects.filter(name__icontains=query_string) | Beer.objects.filter(description__icontains=query_string)
 	businesses = Business.objects.filter(name__icontains=query_string)
 	
@@ -201,6 +227,10 @@ def user_details(request):
 
 
 def map_api(request,pub_slug):
+	'''api for returning the location a given pub
+	returns a 405 if not a valid request, returns 404 if the pub
+	does not exist'''
+
 	if request.method != 'GET':
 		return  HttpResponse(status=405)
 
@@ -218,6 +248,9 @@ def map_api(request,pub_slug):
 
 
 def model_api(request,model_type):
+	'''api for querying the database using ajax
+	allowing only beers and flavours, used for autocomplete'''
+
 	#only allow queries in these models
 	allowed_models = {"beers":Beer,"flavours":Flavor}
 
@@ -243,14 +276,11 @@ def model_api(request,model_type):
 
 @login_required
 def user_reviews(request):
+	'''returns all teh reviews assocaited with a given account'''
 	context_dict = {'reviews':None}
 	#get all the reviews from the current user
 	user = UserProfile.objects.get(user=request.user)
 	context_dict["context"] = request.user.username
 	context_dict['reviews'] = Review.objects.filter(submitter=user)
 	return render(request,'dac/review_list.html',context_dict)
-	pass
-
-def restricted(request):
-	HttpResponse("Access Restricted")
 	pass
