@@ -22,9 +22,9 @@
 					</div>
 					<div class="col-md-8 col-sm-10 col-9">
 						{% if user.username == review.submitter.user.username %}
-							You Rated {{review.rating}} out of 5
+							You rated {{review.rating}} out of 5
 						{% else %}
-							{{review.submitter.user.username}} Rated {{review.rating}} out of 5
+							{{review.submitter.user.username}} rated {{review.rating}} out of 5
 						{% endif %}
 						<p>{{review.review}}</p>
 						{% if review.flavors.all %}
@@ -39,3 +39,4 @@
 		{% endif %}
 	</div>
 {% endblock %}
+
