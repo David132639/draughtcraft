@@ -8,7 +8,7 @@ def get_image_reference(place_id,client=None):
     '''returns a reference object to the first image returned from teh places api
     or none if some error is encountered'''
     if not client:
-        client = googlemaps.Client(key=settings.GOOGLE_PLACES_API_KEY)
+        client = googlemaps.Client(key=settings.GOOGLE_PLACES_SERVER_API_KEY)
 
     place_results = client.place(place_id,fields=PLACE_FIELDS)
     
@@ -22,7 +22,7 @@ def get_image_from_reference(reference,filename,client=None):
     print(reference," ",filename)
 
     if not client:
-        client = googlemaps.Client(key=settings.GOOGLE_PLACES_API_KEY)
+        client = googlemaps.Client(key=settings.GOOGLE_PLACES_SERVER_API_KEY)
 
     '''Small file size to try and prevent throttling by google'''
     with open(filename,"wb") as outfile:
@@ -38,7 +38,7 @@ def get_image_from_reference(reference,filename,client=None):
 def get_place_info(address):
     '''Returns basic fields about a given business from the given address
     or none if no results are returned from the api'''
-    gmaps = googlemaps.Client(key=settings.GOOGLE_PLACES_API_KEY)
+    gmaps = googlemaps.Client(key=settings.GOOGLE_PLACES_SERVER_API_KEY)
 
     place_results = gmaps.find_place(address,input_type="textquery",fields=GOOGLE_MAPS_FIELDS)
 
