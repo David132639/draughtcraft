@@ -155,7 +155,7 @@ def pubs(request,pub_slug=None):
 	if not pub_slug:
 		context_dict['business'] = Business.objects.all()
 		return render(request,'dac/pub_list.html',context_dict)
-	pub = Business.objects.get(slug=pub_slug)
+	pub = get_object_or_404(Business, slug=pub_slug)
 	context_dict["pub"] = pub
 	context_dict["key"] = settings.GOOGLE_PLACES_CLIENT_API_KEY
 
@@ -164,7 +164,7 @@ def pubs(request,pub_slug=None):
 
 def pubs_beers(request,pub_slug):
 	'''returns the beers a specific pub stocks'''
-	pub = Business.objects.get(slug=pub_slug)
+	pub = get_object_or_404(Business, slug=pub_slug)
 	context_dict["pub"] = pub
 	return render(request,'dac/pub_stocks.html',context_dict)
 
