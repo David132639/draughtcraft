@@ -10,6 +10,7 @@ from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
 from dac.services import get_place_info, get_image_from_address
 from django.template.defaultfilters import slugify
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 
@@ -52,7 +53,7 @@ def beers(request,beer_slug=None):
 	#-1 if the beer has no reviews
 	if avg != -1:
 		context_dict["avg"] = avg
-
+	
 	#find all the places where this beer is stocked and return the reponse object
 	context_dict["stockists"] = Business.objects.filter(beers__in=[beer])
 	print(context_dict["stockists"])
@@ -106,7 +107,9 @@ def add_beer_review(request,beer_slug):
 	return render(request,'dac/add_review.html',context_dict)
 
 @login_required
+@csrf_exempt
 def update_beer_stock_info(request, beer_slug):
+
 	if not request.user.is_business:
 		return HttpResponse(status=403)
 	
@@ -115,14 +118,14 @@ def update_beer_stock_info(request, beer_slug):
 	business = get_object_or_404(Business, owner=up)
 
 	if request.method == "GET":
-		if business.beers_set.filter(beer).exists():
+		if business in beer.business_set.all():
 			return HttpResponse(status=200)
 		else:
 			return HttpResponse(status=404)
-	if request_method == "POST":
+	if request.method == "POST":
 		business.beers.add(beer)
 		return HttpResponse(status=200)
-	elif request_method == "DELETE":
+	elif request.method == "DELETE":
 		business.beers.remove(beer)
 		return HttpResponse(status=200)
 	else:
@@ -214,13 +217,16 @@ def user_details(request):
 	
 	if request.user.is_business:
 		#if the user is just registering
-		if not hasattr(profile,'business'):
-			business = Business.objects.create(owner=profile)
-		else:
+		if hasattr(profile,'business'):
 			business = profile.business
-		stocks = ",".join([str(x)for x in business.beers.all()])
-		business_form = BusinessForm({'name':business.name,'address':business.address,'description':business.description,
-			"stocks":stocks})
+			stocks = ",".join([str(x)for x in business.beers.all()])
+			business_form = BusinessForm({'name':business.name,'address':business.address,'description':business.description,
+				"stocks":stocks})
+		else:
+			business = None
+			business_form = BusinessForm({'name': "",'address':"",'description':"",
+				"stocks":""})
+
 		context_dict['forms'].append(business_form)
 	
 	if request.method == 'POST':
@@ -229,6 +235,7 @@ def user_details(request):
 
 		#add the business form to the forms to be validated
 		if request.user.is_business:
+			business, _ = Business.objects.get_or_create(owner=profile)
 			business_form = BusinessForm(request.POST, request.FILES,instance=business)
 			google_addr = get_place_info(business_form.data["address"])
 			if google_addr:
