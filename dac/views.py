@@ -209,10 +209,11 @@ def user_details(request):
 		if request.user.is_business:
 			business_form = BusinessForm(request.POST, request.FILES,instance=business)
 			google_addr = get_place_info(business_form.data["address"])
-			business.lat = google_addr["lat"]
-			business.lng =google_addr["lng"]
-			get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,slugify(business.name)))
-			business.image = "business_images/{0}.jpg".format(business.slug)
+			if google_addr:
+				business.lat = google_addr["lat"]
+				business.lng =google_addr["lng"]
+				get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,slugify(business.name)))
+				business.image = "business_images/{0}.jpg".format(business.slug)
 
 
 			form_list.append(business_form)

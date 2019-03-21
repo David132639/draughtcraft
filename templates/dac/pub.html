@@ -28,22 +28,21 @@
       </ul>
     </div>
   </div>
+
+{% if pub.lng and pub.lat %}
+
   <div class="row">
     <br>
-
     <!-- this is stuff realted to the google maps api -->
 <div id="map" data-name="{{pub.slug}}"></div>
-
-
-
-
 <!--keep me before div map the bottom -->
 <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhirIPKrHsY6xXlRXMHFehpFEflNAqrEU&callback=initMap">
     </script>
 
 <!--end of map stuff-->
-    
+    {% endif %}
+
   </div>
 </div>
 
