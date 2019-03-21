@@ -126,6 +126,8 @@ def populate():
     spam,spamProfile = create_user_account("spam_user","spam_user@bar.com","starwars")
     ham,hamProfile = create_user_account("ham_user","ham_user@bar.com","superSecurePassword")
     bus,busProfile = create_user_account("bus_user","bus_user@bar.com","piney",business=True)
+    bus2,busProfile2 = create_user_account("business","anotherBusiness@bar.com","secretPassowrd",business=True)
+    bus3,busProfile3 = create_user_account("Kel Cafe","spam_business@bar.com","secretPassowrd",business=True)
 
     #setup of sample business
     create_business(user=busProfile,
@@ -133,6 +135,21 @@ def populate():
                     address="232 Woodlands Rd, Glasgow G3 6ND",
                     description="Lively destination for sporting events and parties",
                     stocks=[joker,ceasar]
+                    )
+
+    #setup of sample business
+    create_business(user=busProfile2,
+                    name="Curlers Rest",
+                    address="256-260 Byres Rd, Glasgow G12 8SH",
+                    description="Vibrant yet laid-back pub with old-meets-new decor featuring exposed brickwork and an open fire.",
+                    stocks=[joker,fraoch]
+                    )
+
+    create_business(user=busProfile3,
+                    name="Kelvingrove Cafe",
+                    address="1161 Argyle Street, Glasgow",
+                    description="Brasserie bar with leather banquettes and wood panelling serving English mains, snacks and sliders.",
+                    stocks=[joker,fraoch]
                     )
 
 
