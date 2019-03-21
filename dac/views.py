@@ -157,6 +157,7 @@ def pubs(request,pub_slug=None):
 		return render(request,'dac/pub_list.html',context_dict)
 	pub = Business.objects.get(slug=pub_slug)
 	context_dict["pub"] = pub
+	context_dict["key"] = settings.GOOGLE_PLACES_API_KEY
 
 
 	return render(request,'dac/pub.html',context_dict)
