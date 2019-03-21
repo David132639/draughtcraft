@@ -22,23 +22,26 @@
 			<div class="col-md-4">
 				<div class="form-group ui-widget" >
 					<form class="form-inline" id="user_profile_form" method="post" action="{% url 'user_details' %}" enctype="multipart/form-data" >
-						<input class="btn btn-primary" type="submit" name="submit" value="Update account details" />
+
 
 						{% csrf_token %}
 						{% for form in forms %}
-
+							<div class="row">
 							{% for hidden in form.hidden_fields %}
 								{{ hidden }}
 							{% endfor %}
 							{% for field in form.visible_fields %}
-
+								<div class="col-md-5">
 								{{ field.help_text }}
 								{{ field.errors }}
-
+								</div>
+								<div class="col-md-7">
 								{{ field }}
+								</div>
 							{% endfor %}
+							</div>
 						{% endfor %}
-
+						<input class="btn btn-primary" type="submit" name="submit" value="Submit new choices" />
 					</form>
 				</div>
 			</div>

@@ -12,7 +12,7 @@ class RegisterForm(RegistrationForm):
 	pass
 
 class UserProfileForm(forms.ModelForm):
-	image = forms.ImageField(help_text='profile image',required=False,)
+	image = forms.ImageField(help_text='Profile image:',required=False,)
 	class Meta:
 		model = UserProfile
 		fields = ('image',)
