@@ -17,14 +17,15 @@
         <div class="row">
           {% if avg %}
             Rated {{avg|floatformat:-2}} out of 5 &nbsp;
-            <a href="{% url 'beer_reviews' beer.slug %}">view reviews</a>
+            <a href="{% url 'beer_reviews' beer.slug %}">&nbsp;View all reviews</a>
 
           {% else %}
             No reviews yet...
           {% endif %}
+        </div>
+        <div class="row">
           {% if user.is_authenticated %}
-          or
-            <a href="{% url 'beer_add_review' beer.slug %}">add your own</a>
+            Why not: &nbsp; <a href="{% url 'beer_add_review' beer.slug %}">Add a review</a>
           {% endif %}
         </div>
         <div class="row">
@@ -38,13 +39,11 @@
 
           <div class="col-md-4">
             <strong>Tasting notes</strong>
-            <p id="flavours">
-              <ul>
+              <ul id="flavours">
                 {% for flavor in beer.flavors.all %}
                   <li>{{ flavor.name }}</li>
                 {% endfor %}
-              </p>
-            </ul>
+              </ul>
           </div>
 
           <div class="col-md-4">
