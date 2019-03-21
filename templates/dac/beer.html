@@ -6,75 +6,62 @@
 {% block body_block %}
   <div class="container w-100">
     <div class="row">
-      <div class="col">
+      <div class="col-lg-2">
         <img class="beer_image" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
       </div>
-      <div class="col">
-        <strong> {{ beer.name }} </strong>
-        <p class="description" id="description">{{ beer.description }}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        {% if avg %}
-          Rated {{avg|floatformat:-2}} out of 5
-          <a href="{% url 'beer_reviews' beer.slug %}">view reviews</a>
-          
-        {% else %}
-          No reviews yet...
-        {% endif %}
-        {% if user.is_authenticated %}
-        or
-          <a href="{% url 'beer_add_review' beer.slug %}">add your own</a>
-        {% endif %}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        
-        <div class="row-md-3">
-
-        <strong>Ingredients</strong><br/>
-        <p id="ingredients">
-          {{ beer.ingredients.all|join:", " }}
-        </p>
-
+      <div class="col-lg-10">
+        <div class="row">
+          <strong> {{ beer.name }} </strong>
+          <p class="description" id="description">{{ beer.description }}</p>
         </div>
-
-        <div class="row-md-3">
-
-          <strong>Stockists</strong>
-          {% if stockists %}
-          <ul>
-
-          {% for stocker in stockists %}
-
-           <li> <a href="{% url 'pubs' stocker.slug %}">{{stocker.name}}</a></li>
-
-          {% endfor %}
-
-        </ul>
+        <div class="row">
+          {% if avg %}
+            Rated {{avg|floatformat:-2}} out of 5 &nbsp;
+            <a href="{% url 'beer_reviews' beer.slug %}">view reviews</a>
 
           {% else %}
-        </br>
-
-          This beer is not stocked anywhere... yet
-
+            No reviews yet...
           {% endif %}
-
+          {% if user.is_authenticated %}
+          or
+            <a href="{% url 'beer_add_review' beer.slug %}">add your own</a>
+          {% endif %}
         </div>
+        <div class="row">
+          <div class="col-md-4">
+            <strong>Ingredients</strong><br/>
+            <ul id="ingredients">
+              {% for ingredient in beer.ingredients.all %}
+              <li> {{ ingredient }} </li>
+              {% endfor %}
+          </div>
 
+          <div class="col-md-4">
+            <strong>Tasting notes</strong>
+            <p id="flavours">
+              <ul>
+                {% for flavor in beer.flavors.all %}
+                  <li>{{ flavor.name }}</li>
+                {% endfor %}
+              </p>
+            </ul>
+          </div>
 
-      </div>
-      <div class="col-md-6">
-        <strong>Tasting notes</strong>
-        <p id="flavours">
-          <ul>
-            {% for flavor in beer.flavors.all %}
-              <li>{{ flavor.name }}</li>
-            {% endfor %}
-          </p>
-        </ul>
+          <div class="col-md-4">
+            <strong>Stockists</strong>
+            {% if stockists %}
+              <ul>
+                {% for stocker in stockists %}
+                  <li> <a href="{% url 'pubs' stocker.slug %}">{{stocker.name}}</a></li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              </br>
+              This beer is not stocked anywhere... yet
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
-  {% endblock %}
+  </div>
+{% endblock %}
