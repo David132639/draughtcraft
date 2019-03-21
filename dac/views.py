@@ -9,6 +9,7 @@ from dac.models import Beer, Business,UserProfile,Review, Flavor
 from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
 from dac.services import get_place_info, get_image_from_address
+from django.template.defaultfilters import slugify
 import json
 
 
@@ -210,7 +211,7 @@ def user_details(request):
 			google_addr = get_place_info(business_form.data["address"])
 			business.lat = google_addr["lat"]
 			business.lng =google_addr["lng"]
-			get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,business.slug))
+			get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,slugify(business.name)))
 			business.image = "business_images/{0}.jpg".format(business.slug)
 
 
