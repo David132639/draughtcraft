@@ -66,9 +66,9 @@ RATING_CHOICES = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),]
 
 class BeerReview(forms.ModelForm):
 	image = forms.ImageField(help_text='Image of your beer',required=False,)
-	rating = forms.ChoiceField(help_text="rating",choices=RATING_CHOICES)
-	flavours = forms.CharField(help_text="flavour profile")
-	reivew = forms.Textarea()
+	rating = forms.ChoiceField(help_text="Rating",choices=RATING_CHOICES)
+	flavours = forms.CharField(help_text="Flavour profile")
+	review = forms.CharField(widget=forms.Textarea(),help_text="Review text")
 
 
 	class Meta:
@@ -86,7 +86,7 @@ class BeerReview(forms.ModelForm):
 		cleaned_data = super(BeerReview,self).clean()
 		if "flavours" in cleaned_data:
 			cleaned_data["flavours"] = [x.strip() for x in cleaned_data['flavours'].split(",")]
-		
+
 		if "ratings" in cleaned_data and (cleaned_data["ratings"]> 0 or cleaned_data["ratings"] < 0):
 			raise ValidationError("rating outwith accepted ie. 0-5 inclusive")
 
@@ -102,4 +102,3 @@ class BeerReview(forms.ModelForm):
 		if commit:
 			instance.save()
 		return instance
-

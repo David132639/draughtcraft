@@ -7,9 +7,9 @@
   Details of {{pub.name}}
 {% endblock %}
 {% block body_block %}
-<script src="{% static 'js/map.js' %}"></script>
+<script src="{% static 'map.js' %}"></script>
 
-<div class="container w-100">
+<div class="container ">
   <div class="row">
     <div class="col-md-4">
       <img class="pub-thumbnail" src="{{ MEDIA_URL }}{{ pub.image }}" alt="an image of {{ pub.name }}">
@@ -20,7 +20,7 @@
       (added by {{pub.owner.user.username}})
     </div>
     <div class="col-md-3">
-      Beers available at {{ pub.name }}:
+      {{ pub.name }} stocks:
       <ul>
         {% for beer in pub.beers.all %}
         <li><a href="{% url 'beers' beer.slug %}"> {{ beer.name }}</a></li>
@@ -28,20 +28,21 @@
       </ul>
     </div>
   </div>
-
-{% if pub.lng and pub.lat %}
-
   <div class="row">
     <br>
+
     <!-- this is stuff realted to the google maps api -->
 <div id="map" data-name="{{pub.slug}}"></div>
+
+
+
+
 <!--keep me before div map the bottom -->
 <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhirIPKrHsY6xXlRXMHFehpFEflNAqrEU&callback=initMap">
     </script>
 
 <!--end of map stuff-->
-    {% endif %}
 
   </div>
 </div>
