@@ -7,20 +7,19 @@
 Details of {{ beer.name }}
 {% endblock %}
 {% block body_block %}
-  <div class="container w-100">
+  <div class="container ">
     <div class="row">
       <div class="col-lg-2">
         <img class="beer_image" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
       </div>
       <div class="col-lg-10">
         <div class="row">
-          <strong>Description</strong>
           <p class="description" id="description">{{ beer.description }}</p>
         </div>
         <div class="row">
           {% if avg %}
-            Rated {{avg|floatformat:-2}} out of 5 &nbsp;
-            <a href="{% url 'beer_reviews' beer.slug %}">&nbsp;View all reviews</a>
+            Rated {{avg|floatformat:-2}} out of 5
+            &nbsp;<a href="{% url 'beer_reviews' beer.slug %}">View all reviews</a>
 
           {% else %}
             No reviews yet...
@@ -28,7 +27,7 @@ Details of {{ beer.name }}
         </div>
         <div class="row">
           {% if user.is_authenticated %}
-            Why not: &nbsp; <a href="{% url 'beer_add_review' beer.slug %}">Add a review</a>
+            Why not: &nbsp; <a href="{% url 'beer_add_review' beer.slug %}">Add or edit your review </a>
           {% endif %}
         </div>
         <div class="row">

@@ -1,6 +1,9 @@
 {% extends 'dac/base.html' %}
+
 {% block title_block %}
-	Reviews - {{context}}
+
+Reviews - {{context}}
+
 {% endblock %}
 {% block jumbo_block %}
 	{% if context == user.username %}
@@ -10,32 +13,51 @@
 	{% endif %}
 {% endblock %}
 {% block body_block %}
-	<div class="container-fluid w-100">
-		<!-- catch if the user manually enters review url with no reviews -->
-		{% if reviews|length == 0 %}
-			No reviews yet :(
-		{% else %}
-			{% for review in reviews %}
-				<div class="row review_entry">
-					<div class="col-md-2 col-sm-2 col-3">
-						<img class="img-thumbnail img-fluid review_image" src="{{MEDIA_URL}}{{review.submitter.image}}">
-					</div>
-					<div class="col-md-8 col-sm-10 col-9">
-						{% if user.username == review.submitter.user.username %}
-							You Rated {{review.rating}} out of 5
-						{% else %}
-							{{review.submitter.user.username}} Rated {{review.rating}} out of 5
-						{% endif %}
-						<p>{{review.review}}</p>
-						{% if review.flavors.all %}
-							<strong>Flavor Profile</strong>
-							<p>
-								{{review.flavors.all|join:", "}}
-							</p>
-						{% endif %}
-					</div>
-				</div>
-			{% endfor %}
-		{% endif %}
-	</div>
+
+
+
+<div class="container ">
+<!-- catch if the user manually enters review url with no reviews -->
+{% if reviews|length == 0 %}
+
+No reviews yet :(
+
+{% else %}
+
+
+{% for review in reviews %}
+
+<div class="row review_entry">
+
+	<div class="col-md-2 col-sm-2 col-3">
+	<img class="img-thumbnail img-fluid review_image" src="{{MEDIA_URL}}{{review.submitter.image}}">
+</div>
+
+<div class="col-md-8 col-sm-10 col-9">
+
+	{% if user.username == review.submitter.user.username %}
+
+	You Rated {{review.rating}} out of 5
+
+	{% else %}
+
+	{{review.submitter.user.username}} Rated {{review.rating}} out of 5
+
+	{% endif %}
+
+	<p>{{review.review}}</p>
+
+
+</div>
+
+
+</div>
+
+{% endfor %}
+
+
+{% endif %}
+
+
+</div>
 {% endblock %}
