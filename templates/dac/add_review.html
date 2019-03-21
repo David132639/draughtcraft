@@ -26,7 +26,7 @@
 				<img id="displayImg" class="profile_image" src="">
 			</div>
 			
-			<form  id="beer_review_form" method="post" action="{% url 'beer_add_review' beer.slug %}">
+			<form  id="beer_review_form" method="post" action="{% url 'beer_add_review' beer.slug %}" enctype="multipart/form-data">
 				{% csrf_token %}
 				{% for hidden in form.hidden_fields %}
 					{{ hidden }}

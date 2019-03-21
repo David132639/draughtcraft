@@ -70,12 +70,13 @@ def add_beer_review(request,beer_slug):
 
 	if request.method == "POST":
 		if edit:
-			form = BeerReview(request.POST,instance = prev_review)
+			form = BeerReview(request.POST,request.FILES,instance = prev_review)
 		else:
-			form = BeerReview(request.POST)
+			form = BeerReview(request.POST,request.FILES)
 		if form.is_valid():			
 			review = form.save(commit=True,beer=beer,profile=profile)
 			#must save before and after to satisfy many to many relationship
+			review.image = form.cleaned_data["image"]
 			review.flavors.clear()
 			for flavor in form.cleaned_data['flavours']:
 				try:
@@ -245,8 +246,9 @@ def user_reviews(request):
 	context_dict = {'reviews':None}
 	#get all the reviews from the current user
 	user = UserProfile.objects.get(user=request.user)
+	context_dict["context"] = request.user.username
 	context_dict['reviews'] = Review.objects.filter(submitter=user)
-	render(request,'dac/user_reviews.html',context_dict)
+	return render(request,'dac/review_list.html',context_dict)
 	pass
 
 def restricted(request):

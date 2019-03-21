@@ -120,7 +120,7 @@ class Business(models.Model):
 class Review(models.Model):
 	rating = models.PositiveSmallIntegerField(default=1)
 	review = models.TextField(blank=False)
-	avatar = models.ImageField(upload_to='review_images',default='review_images/default.png')
+	image = models.ImageField(upload_to='review_images',default='review_images/default.png')
 	submitter = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 	flavors = models.ManyToManyField(Flavor)
 	beer = models.ForeignKey(Beer)
