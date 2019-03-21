@@ -31,12 +31,40 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <strong>Ingredients</strong><br>
+        
+        <div class="row-md-3">
+
+        <strong>Ingredients</strong><br/>
         <p id="ingredients">
-          {% for part in beer.ingredients.all %}
-            {{ part.name }}
-          {% endfor %}
+          {{ beer.ingredients.all|join:", " }}
         </p>
+
+        </div>
+
+        <div class="row-md-3">
+
+          <strong>Stockists</strong>
+          {% if stockists %}
+          <ul>
+
+          {% for stocker in stockists %}
+
+           <li> <a href="{% url 'pubs' stocker.slug %}">{{stocker.name}}</a></li>
+
+          {% endfor %}
+
+        </ul>
+
+          {% else %}
+        </br>
+
+          This beer is not stocked anywhere... yet
+
+          {% endif %}
+
+        </div>
+
+
       </div>
       <div class="col-md-6">
         <strong>Tasting notes</strong>

@@ -201,6 +201,7 @@ def create_business(user,name,address,description,stocks=[],):
                                             description=description,
                                             lat=google_addr_info["lat"],
                                             lng=google_addr_info["lng"],
+                                            image='business_images/default.png'
                                             )
     for stock in stocks:
         business.beers.add(stock)

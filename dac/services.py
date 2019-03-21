@@ -21,18 +21,20 @@ def get_image_reference(place_id,client=None):
         return None
 
 def get_image_from_reference(reference,filename,client=None):
+    print(reference," ",filename)
+
     if not client:
         client = googlemaps.Client(key=GOOGLE_PLACES_API_KEY)
 
-    try:
-        with open(filename,"wb") as outfile:
-            for chunk in client.places_photo(
-                reference["photo_reference"],max_width=175,max_height=175):
+    
+    with open(filename,"wb") as outfile:
+        for chunk in client.places_photo(
+            reference["photo_reference"],max_width=175,max_height=175):
 
-                if chunk:
-                    outfile.write(chunk)
-    except:
-        pass
+            if chunk:
+                print("writing chunk")
+                outfile.write(chunk)
+    
 
 
 def get_place_info(address):
@@ -58,11 +60,13 @@ def get_image_from_address(address,filename):
     returns false if this function fails'''
     place_info = get_place_info(address)
     if place_info:
+        print("TERMINAL: got place info")
         reference = get_image_reference(place_info["place id"])
     else:
         return False
 
     if reference:
+        print("TERMINAL: got image reference")
         get_image_from_reference(reference,filename)
         return True
     else:

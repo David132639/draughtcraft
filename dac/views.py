@@ -3,11 +3,12 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
 from django.urls import reverse
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from dac.models import Beer, Business,UserProfile,Review, Flavor
 from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
-from dac.services import get_place_info
+from dac.services import get_place_info, get_image_from_address
 import json
 
 
@@ -104,7 +105,8 @@ def pubs(request,pub_slug=None):
 	context_dict = {}
 
 	if not pub_slug:
-		return HttpResponse("print a whole load of pubs")
+		context_dict['business'] = Business.objects.all()
+		return render(request,'dac/pub_list.html',context_dict)
 	pub = Business.objects.get(slug=pub_slug)
 	context_dict["pub"] = pub
 
@@ -181,6 +183,10 @@ def user_details(request):
 			google_addr = get_place_info(business_form.data["address"])
 			business.lat = google_addr["lat"]
 			business.lng =google_addr["lng"]
+			get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,business.slug))
+			business.image = "business_images/{0}.jpg".format(business.slug)
+
+
 			form_list.append(business_form)
 		
 		#check if all of teh forms are valid and then save

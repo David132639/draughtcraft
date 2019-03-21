@@ -105,6 +105,7 @@ class Business(models.Model):
 	lat = models.FloatField(null=True)
 
 	beers = models.ManyToManyField(Beer)
+	image = models.ImageField(upload_to='business_images',default='business_images/default.png')
 
 	class Meta:
 		verbose_name_plural = 'Businesses'
