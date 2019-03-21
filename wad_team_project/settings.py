@@ -23,8 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_-dk-4*ta+2r!)_k^dlxm)#%7a#u6a7s6&#943)$qi+!0uetey'
 
 # Google Places API key
-GOOGLE_PLACES_API_KEY = 'AIzaSyAJBlNwBaml17vY8P1SUzLrtyghzq1K3OQ'
-
+GOOGLE_PLACES_CLIENT_API_KEY = 'AIzaSyAJBlNwBaml17vY8P1SUzLrtyghzq1K3OQ'
+GOOGLE_PLACES_SERVER_API_KEY = 'AIzaSyARhW1n2S6Yfzi7znnJ34KIyjP6h0p9Lgg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
