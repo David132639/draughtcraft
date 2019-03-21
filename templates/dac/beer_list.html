@@ -1,7 +1,10 @@
 {% extends 'dac/base.html' %}
 {% load staticfiles %}
 {% block title_block%}
-    List of beers
+    Beers
+{% endblock %}
+{% block jumbo_block %}
+  All beers
 {% endblock %}
 {% block body_block %}
 {% include "dac/beer_results.html" with beers=beers %}

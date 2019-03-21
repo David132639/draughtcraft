@@ -3,6 +3,9 @@
 {% block title_block%}
   {{ beer.name }}
 {% endblock %}
+{% block jumbo_block %}
+Details of {{ beer.name }}
+{% endblock %}
 {% block body_block %}
   <div class="container w-100">
     <div class="row">
@@ -11,7 +14,6 @@
       </div>
       <div class="col-lg-10">
         <div class="row">
-          <strong> {{ beer.name }} </strong>
           <p class="description" id="description">{{ beer.description }}</p>
         </div>
         <div class="row">

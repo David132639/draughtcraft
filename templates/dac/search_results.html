@@ -3,10 +3,14 @@
 {% block title_block%}
   Results for {{ query }}
 {% endblock %}
+{% block jumbo_block %}
+	Search results for &nbsp;<em>{{ query }}</em>
+{% endblock %}
 {% block body_block %}
 <div class="container">
-    <h2>Search results for &nbsp;<em>{{ query }}</em></h2>
+  <h2>Beers</h2>
     {% include "dac/beer_results.html" with beers=beers %}
+    <h2>Pubs</h2>
     {% include "dac/pub_results.html" with business=business %}
 </div>
 

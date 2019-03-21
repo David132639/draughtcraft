@@ -5,25 +5,18 @@
 Reviews - {{context}}
 
 {% endblock %}
-
+{% block jumbo_block %}
+	{% if context == user.username %}
+		My reviews
+	{% else %}
+		Reviews for {{context}}
+	{% endif %}
+{% endblock %}
 {% block body_block %}
 
 
 
 <div class="container-fluid w-100">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="jumbotron">
-				<h1>
-					{% if context == user.username %}
-						My reviews
-					{% else %}
-						Reviews for {{context}}
-					{% endif %}
-				</h1>
-			</div>
-		</div>
-	</div>
 <!-- catch if the user manually enters review url with no reviews -->
 {% if reviews|length == 0 %}
 

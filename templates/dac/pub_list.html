@@ -1,6 +1,9 @@
 {% extends 'dac/base.html' %}
 {% block title_block%}
-  List of Businesses
+  Pubs
+{% endblock %}
+{% block jumbo_block %}
+  All pubs
 {% endblock %}
 {% block body_block %}
 {% include "dac/pub_results.html" with beers=beers %}
