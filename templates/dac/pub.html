@@ -20,7 +20,7 @@
       (added by {{pub.owner.user.username}})
     </div>
     <div class="col-md-3">
-      {{ pub.name }} stocks:
+      Beers available at {{ pub.name }}:
       <ul>
         {% for beer in pub.beers.all %}
         <li><a href="{% url 'beers' beer.slug %}"> {{ beer.name }}</a></li>
