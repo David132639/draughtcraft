@@ -8,19 +8,18 @@
                     <div class="row">
                         <div class="col-sm-4">
                                 <img class="pub-thumbnail" src="{{ MEDIA_URL }}{{ pub.image }}" alt="an image of {{ pub.name }}">
-
-                    </div>
-                    <div class="col-sm-8">
+                        </div>
+                        <div class="col-sm-8">
                             <a href="{% url 'pubs' pub.slug %}"> {{ pub.name }}
                                     {{ pub.address }}</a>
                                    <p>{{ pub.description }}</p>
 
                         </div>
+                    </div>
+                    {% endfor %}
 
-                        {% endfor %}
 
 
-                </div>
 
 
 
