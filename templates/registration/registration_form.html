@@ -6,9 +6,13 @@
 	Registration here
 {% endblock %}
 {% block body_block %}
-<form method="post" action=".">
-{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Submit" />
-</form>
+<div class="container w-100">
+
+	<form method="post" action=".">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Submit" />
+	</form>
+
+</div>
 {% endblock %}
