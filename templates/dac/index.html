@@ -42,9 +42,23 @@ Welcome to the home of good beer
             <!--django bar stuff in here-->
             {% if business %}
               {% for pub in business %}
+
+
+              <div class="row">
+
+                <div class="col-md-8">
                 <a href="{% url 'pubs' pub.slug %}"> {{ pub.name }}</a>
-                {{ pub.description }}<br/>
+                {{ pub.description }}<br/>  
+              
+                </div>
+                <div class="col-md-4">
+                
+               <img class="img-thumbnail" src="{{ MEDIA_URL }}{{ pub.image }}" alt="an image of {{ pub.name }}">
+
+              </div>
+
               {% endfor %}
+              </div>
             {% else %}
             {% endif %}
           </div>
