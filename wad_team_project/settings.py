@@ -28,7 +28,7 @@ GOOGLE_PLACES_API_KEY = 'AIzaSyDhirIPKrHsY6xXlRXMHFehpFEflNAqrEU'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["draughtandcraft.eu.pythonanywhere.com"]
 
 
 # Application definition
