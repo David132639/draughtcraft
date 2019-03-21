@@ -203,8 +203,12 @@ def create_super_user(username, email, password):
         pass
 
 def create_user_account(username,email,password,business=False):
-    user,created = User.objects.get_or_create(username=username,email=email,password=password,is_business=business)
-    print("- User: {0} Created: {1}".format(str(user),str(created)))
+    try:
+        user= User.objects.create_user(username=username,email=email,password=password,is_business=business)
+        print("- User: {0} Created: {1}".format(str(user)))
+    except:
+        user = User.objects.get(username=username)
+        pass
     user_profile,created = UserProfile.objects.get_or_create(user=user)
     print("\tUser profile: {0} Created: {1}".format(str(user_profile),str(created)))
     return user,user_profile
