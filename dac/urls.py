@@ -14,6 +14,8 @@ url(r'^beers/$', views.beers, name='beers'),
 url(r'^beers/(?P<beer_slug>[\w\-]+)/$', views.beers, name='beers'),
 url(r'^beers/(?P<beer_slug>[\w\-]+)/reviews$', views.beers_reviews, name='beer_reviews'),
 url(r'^beers/(?P<beer_slug>[\w\-]+)/add_review$', views.add_beer_review, name='beer_add_review'),
+url(r'^beers/(?P<beer_slug>[\w\-]+)/stock$', views.update_beer_stock_info, name='beer_update_stock_info'),
+
 
 #pubs
 url(r'^pubs/$', views.pubs, name='pubs'),

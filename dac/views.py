@@ -105,6 +105,28 @@ def add_beer_review(request,beer_slug):
 			return index(request)
 	return render(request,'dac/add_review.html',context_dict)
 
+@login_required
+def update_beer_stock_info(request, beer_slug):
+	if not request.user.is_business:
+		return HttpResponse(status=403)
+	
+	up = UserProfile.objects.get(user=request.user)
+	beer = get_object_or_404(Beer, slug=beer_slug)
+	business = get_object_or_404(Business, owner=up)
+
+	if request.method == "GET":
+		if business.beers_set.filter(beer).exists():
+			return HttpResponse(status=200)
+		else:
+			return HttpResponse(status=404)
+	if request_method == "POST":
+		business.beers.add(beer)
+		return HttpResponse(status=200)
+	elif request_method == "DELETE":
+		business.beers.remove(beer)
+		return HttpResponse(status=200)
+	else:
+		return HttpResponse(status=405)
 
 def beers_reviews(request,beer_slug):
 	'''Returns all of the reviews for a specified beer'''
