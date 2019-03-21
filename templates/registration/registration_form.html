@@ -1,9 +1,18 @@
 {% extends "dac/base.html" %}
+{% block title_block %}
+	Registration
+{% endblock %}
+{% block jumbo_block %}
+	Registration here
+{% endblock %}
 {% block body_block %}
-<h1>Register Here</h1>
-<form method="post" action=".">
-{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Submit" />
-</form>
+<div class="container w-100">
+
+	<form method="post" action=".">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Submit" />
+	</form>
+
+</div>
 {% endblock %}

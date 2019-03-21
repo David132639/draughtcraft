@@ -1,6 +1,11 @@
 {% extends "dac/base.html" %}
+{% block title_block %}
+	Login
+{% endblock %}
+{% block jumbo_block %}
+	Login
+{% endblock %}
 {% block body_block %}
-<h1>Login</h1>
 <form method="post" action=".">
 {% csrf_token %}
 {{ form.as_p }}

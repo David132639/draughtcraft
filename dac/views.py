@@ -3,18 +3,22 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.http import HttpResponse
 from django.urls import reverse
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from dac.models import Beer, Business,UserProfile,Review, Flavor
 from dac.forms import UserProfileForm, BusinessForm, BeerReview
 from registration.backends.simple.views import RegistrationView
-from dac.services import get_place_info
+from dac.services import get_place_info, get_image_from_address
+from django.template.defaultfilters import slugify
 import json
 
 
 # General site pages
 def index(request):
-	context_dict = {"beers":None,"business":None}
+	'''Returns the index page of the site, and the top three beers sorted by review average
+	and the top pubs sortd by the number of beers that they stock'''
 
+	context_dict = {"beers":None,"business":None}
 	#get top three rated beers but not implemented yet
 	beers = sorted(Beer.objects.all(),key=lambda x: x.get_review_average(),reverse=True)[:3]
 	print(beers)
@@ -25,11 +29,15 @@ def index(request):
 	return render(request, 'dac/index.html', context=context_dict)
 
 def sitemap(request):
+	'''Returns the sitemap for the site'''
 	return render(request,'dac/sitemap.html')
 
 
 #beer stuff
 def beers(request,beer_slug=None):
+	'''Returns a specified beer if a beer slug is passed otherwise returns a list of beers
+	in no particular order'''
+
 	context_dict = {'beer': None,}
 
 	#none specific so just a load of beers and send to the user
@@ -40,14 +48,24 @@ def beers(request,beer_slug=None):
 	#an explicit beer slug has been passed so just get that beer specifically
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	avg = beer.get_review_average()
+
+	#-1 if the beer has no reviews
 	if avg != -1:
 		context_dict["avg"] = avg
+
+	#find all the places where this beer is stocked and return the reponse object
+	context_dict["stockists"] = Business.objects.filter(beers__in=[beer])
+	print(context_dict["stockists"])
 	context_dict["beer"] = beer
 
 	return render(request,'dac/beer.html',context_dict)
 
 @login_required
 def add_beer_review(request,beer_slug):
+	'''Returns a form for submitting a beer review for the specified beer
+	pre populates with a previous review if it already exists'''
+
+
 	#basic form for user adding review to a specific beer
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	profile = UserProfile.objects.get(user=request.user)
@@ -58,7 +76,6 @@ def add_beer_review(request,beer_slug):
 		prev_review = Review.objects.get(submitter=profile,beer=beer)
 		flavours = ", ".join([str(x)for x in prev_review.flavors.all()])
 		print("flavours already in teh form",flavours)
-
 		form = BeerReview({'review':prev_review.review,"rating":prev_review.rating,'flavours':flavours})
 		edit = True
 	except Review.DoesNotExist:
@@ -67,12 +84,17 @@ def add_beer_review(request,beer_slug):
 
 	if request.method == "POST":
 		if edit:
-			form = BeerReview(request.POST,instance = prev_review)
+			#if we are updating, update the existing model
+			form = BeerReview(request.POST,request.FILES,instance = prev_review)
 		else:
-			form = BeerReview(request.POST)
+			form = BeerReview(request.POST,request.FILES)
 		if form.is_valid():			
 			review = form.save(commit=True,beer=beer,profile=profile)
 			#must save before and after to satisfy many to many relationship
+			review.image = form.cleaned_data["image"]
+			
+			#allow the user to add as well as remove flavours from their
+			#perceived flavour profile
 			review.flavors.clear()
 			for flavor in form.cleaned_data['flavours']:
 				try:
@@ -107,6 +129,7 @@ def update_beer_stock_info(request, beer_slug):
 		return HttpResponse(status=405)
 
 def beers_reviews(request,beer_slug):
+	'''Returns all of the reviews for a specified beer'''
 	context_dict = {}
 	beer = get_object_or_404(Beer,slug=beer_slug)
 	context = beer.name
@@ -118,13 +141,17 @@ def beers_reviews(request,beer_slug):
 	return render(request,'dac/review_list.html',context_dict)
 
 
-#pub stuff
+#pub views
 
 def pubs(request,pub_slug=None):
+	'''returns a list of pubs if no slug is passed in, otherwise returns a specific
+	pub'''
+
 	context_dict = {}
 
 	if not pub_slug:
-		return HttpResponse("print a whole load of pubs")
+		context_dict['business'] = Business.objects.all()
+		return render(request,'dac/pub_list.html',context_dict)
 	pub = Business.objects.get(slug=pub_slug)
 	context_dict["pub"] = pub
 
@@ -132,20 +159,25 @@ def pubs(request,pub_slug=None):
 	return render(request,'dac/pub.html',context_dict)
 
 def pubs_beers(request,pub_slug):
+	'''returns the beers a specific pub stocks'''
 	pub = Business.objects.get(slug=pub_slug)
 	context_dict["pub"] = pub
 	return render(request,'dac/pub_stocks.html',context_dict)
 
 
 def about(request):
+	'''returns the about page'''
 	return render(request,'dac/about.html')
 
 
 def privacy(request):
+	'''Returns a page containing the privacy policy'''
 	return render(request,'dac/privacy.html')
 
 #searching stuff
 def search(request, query_string):
+	'''Returns a page of search results for a given query string'''
+
 	beers = Beer.objects.filter(name__icontains=query_string) | Beer.objects.filter(description__icontains=query_string)
 	businesses = Business.objects.filter(name__icontains=query_string)
 	
@@ -199,8 +231,13 @@ def user_details(request):
 		if request.user.is_business:
 			business_form = BusinessForm(request.POST, request.FILES,instance=business)
 			google_addr = get_place_info(business_form.data["address"])
-			business.lat = google_addr["lat"]
-			business.lng =google_addr["lng"]
+			if google_addr:
+				business.lat = google_addr["lat"]
+				business.lng =google_addr["lng"]
+				get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,slugify(business.name)))
+				business.image = "business_images/{0}.jpg".format(business.slug)
+
+
 			form_list.append(business_form)
 		
 		#check if all of teh forms are valid and then save
@@ -214,6 +251,10 @@ def user_details(request):
 
 
 def map_api(request,pub_slug):
+	'''api for returning the location a given pub
+	returns a 405 if not a valid request, returns 404 if the pub
+	does not exist'''
+
 	if request.method != 'GET':
 		return  HttpResponse(status=405)
 
@@ -231,6 +272,9 @@ def map_api(request,pub_slug):
 
 
 def model_api(request,model_type):
+	'''api for querying the database using ajax
+	allowing only beers and flavours, used for autocomplete'''
+
 	#only allow queries in these models
 	allowed_models = {"beers":Beer,"flavours":Flavor}
 
@@ -256,13 +300,11 @@ def model_api(request,model_type):
 
 @login_required
 def user_reviews(request):
+	'''returns all teh reviews assocaited with a given account'''
 	context_dict = {'reviews':None}
 	#get all the reviews from the current user
 	user = UserProfile.objects.get(user=request.user)
+	context_dict["context"] = request.user.username
 	context_dict['reviews'] = Review.objects.filter(submitter=user)
-	render(request,'dac/user_reviews.html',context_dict)
-	pass
-
-def restricted(request):
-	HttpResponse("Access Restricted")
+	return render(request,'dac/review_list.html',context_dict)
 	pass

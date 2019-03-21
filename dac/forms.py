@@ -4,7 +4,7 @@ from dac.models import User,UserProfile,Business,Review,Beer,Flavor
 
 
 class RegisterForm(RegistrationForm):
-	'''custom register form for businesses'''
+	'''custom register form for businesses functionality'''
 	is_business = forms.BooleanField(label="Business User",initial=False,required=False)
 	class Meta:
 		fields = ('username','is_business','email','password1','password2')
@@ -86,6 +86,10 @@ class BeerReview(forms.ModelForm):
 		cleaned_data = super(BeerReview,self).clean()
 		if "flavours" in cleaned_data:
 			cleaned_data["flavours"] = [x.strip() for x in cleaned_data['flavours'].split(",")]
+		
+		if "ratings" in cleaned_data and (cleaned_data["ratings"]> 0 or cleaned_data["ratings"] < 0):
+			raise ValidationError("rating outwith accepted ie. 0-5 inclusive")
+
 		return cleaned_data
 
 	def save(self,commit=True,*args,**kwargs):

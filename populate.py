@@ -48,7 +48,7 @@ def populate():
                    "citra": add_ingredient("Citra", Ingredient.HOPS)
                    }
 
-    add_beer(name='Caesar Augustus',
+    ceasar = add_beer(name='Caesar Augustus',
              img_name="caesar-augustus.jpeg",
              tagline='Lager / IPA hybrid',
              description="This Lager / IPA hybrid is a revolution in \
@@ -65,7 +65,7 @@ def populate():
                       flavors["biscuity"]],
              ingredients=[ingredients["wheat"], ingredients["oats"], ingredients["prye"]])
 
-    add_beer(name='Joker IPA',
+    joker = add_beer(name='Joker IPA',
              img_name="joker-ipa.jpg",
              tagline='Wickedly Hoppy',
              description="There's at least one in every pack and this is \
@@ -84,7 +84,7 @@ def populate():
                       flavors["herbal"], flavors["piney"], flavors["med_bitter"]],
              ingredients=[ingredients["wheat"], ingredients["fgold"], ingredients["prye"], ingredients["mosaic"]])
 
-    add_beer(name='Fraoch',
+    fraoch =add_beer(name='Fraoch',
              img_name="default.jpg",
              tagline='Heather Ale',
              description='The Original Craft Beer; brewed in Scotland \
@@ -122,8 +122,46 @@ def populate():
              ingredients=[ingredients["wheat"], ingredients["fgold"], ingredients["pcrys"],
                           ingredients["mosaic"], ingredients["lmalt"], ingredients["cascade"]])
 
+    #create some user and business accounts
+    spam,spamProfile = create_user_account("spam_user","spam_user@bar.com","starwars")
+    ham,hamProfile = create_user_account("ham_user","ham_user@bar.com","superSecurePassword")
+    bus,busProfile = create_user_account("bus_user","bus_user@bar.com","piney",business=True)
+    bus2,busProfile2 = create_user_account("business","anotherBusiness@bar.com","secretPassowrd",business=True)
+    bus3,busProfile3 = create_user_account("Kel Cafe","spam_business@bar.com","secretPassowrd",business=True)
+
+    #setup of sample business
+    create_business(user=busProfile,
+                    name="DRAM!",
+                    address="232 Woodlands Rd, Glasgow G3 6ND",
+                    description="Lively destination for sporting events and parties",
+                    stocks=[joker,ceasar]
+                    )
+
+    #setup of sample business
+    create_business(user=busProfile2,
+                    name="Curlers Rest",
+                    address="256-260 Byres Rd, Glasgow G12 8SH",
+                    description="Vibrant yet laid-back pub with old-meets-new decor featuring exposed brickwork and an open fire.",
+                    stocks=[joker,fraoch]
+                    )
+
+    create_business(user=busProfile3,
+                    name="Kelvingrove Cafe",
+                    address="1161 Argyle Street, Glasgow",
+                    description="Brasserie bar with leather banquettes and wood panelling serving English mains, snacks and sliders.",
+                    stocks=[joker,fraoch]
+                    )
+
+
+    #creating user reviews
+    create_beer_review(user_profile=hamProfile,beer=joker,content="Good beer",rating=5)
+    create_beer_review(user_profile=spamProfile,beer=joker,content="ok beer",rating=2)
+    create_beer_review(user_profile=spamProfile,beer=ceasar,content="meh beer",rating=1)
+
     print('\nSuperUser:', User.objects.get(is_superuser=True).username)
     print('\n' + ('=' * 80) + '\n')
+
+    
 
 
 def add_ingredient(name, category):
@@ -143,7 +181,6 @@ def add_flavor(name, category):
 def add_beer(name, img_name, tagline, description, abv, ibu, og, calories, flavors, ingredients):
 
     img_file = os.path.join("beer_images", img_name)
-    print(img_file)
     b, created = Beer.objects.get_or_create(name=name,
                                             image=img_file,
                                             tagline=tagline,
@@ -165,6 +202,35 @@ def create_super_user(username, email, password):
     except IntegrityError:
         pass
 
+def create_user_account(username,email,password,business=False):
+    user,created = User.objects.get_or_create(username=username,email=email,password=password,is_business=business)
+    print("- User: {0} Created: {1}".format(str(user),str(created)))
+    user_profile,created = UserProfile.objects.get_or_create(user=user)
+    print("\tUser profile: {0} Created: {1}".format(str(user_profile),str(created)))
+    return user,user_profile
+
+def create_business(user,name,address,description,stocks=[],):
+    google_addr_info = get_place_info(address)
+
+    business,created = Business.objects.get_or_create(owner=user,
+                                            name=name,
+                                            address=google_addr_info["address"],
+                                            description=description,
+                                            lat=google_addr_info["lat"],
+                                            lng=google_addr_info["lng"],
+                                            image='business_images/default.png'
+                                            )
+    for stock in stocks:
+        business.beers.add(stock)
+    print("- Business: {0} Created: {1}".format(str(business),str(created)))
+
+
+def create_beer_review(user_profile,beer,content,rating):
+    review,created = Review.objects.get_or_create(submitter=user_profile,
+                                                beer=beer,
+                                                rating=rating,
+                                                review=content)
+    print("- Review: {0} Created: {1}".format(str(review),str(created)))
 
 if __name__ == '__main__':
     print('\n' + ('=' * 80) + '\n')
@@ -173,7 +239,8 @@ if __name__ == '__main__':
     django.setup()
 
     from dac.models import Ingredient, Flavor, Beer, Business, UserProfile
-    from dac.models import User
+    from dac.models import User, Review
     from django.db import IntegrityError
+    from dac.services import get_place_info
 
     populate()

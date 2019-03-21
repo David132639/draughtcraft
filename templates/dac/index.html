@@ -3,6 +3,9 @@
 {% block title_block%}
   Index
 {% endblock %}
+{% block jumbo_block %}
+Welcome to the home of good beer
+{% endblock %}
 {% block body_block %}
   <!-- maybe a jumbotron here?-->
 
@@ -16,9 +19,16 @@
             <!--django beer stuff in here-->
             {% if beers %}
               {% for beer in beers %}
-                <a href="{% url 'beers' beer.slug %}">{{ beer.name }}</a>
-                {{ beer.tagline }}
-                <br/>
+              <div class="row">
+                  <div class="col-md-6">  <a href="{% url 'beers' beer.slug %}">{{ beer.name }}</a>
+              {{ beer.tagline }}</div>
+
+              <div class="col-md-6">
+                  <img class="img-thumbnail" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
+              </div></div>
+
+
+
               {% endfor %}
             {% else %}
             {% endif %}
