@@ -26,9 +26,9 @@
 						{% else %}
 							{{review.submitter.user.username}} rated {{review.rating}} out of 5
 						{% endif %}
-						<p>{{review.review}}</p>
+						<p><strong>Review:</strong><br>{{review.review}}</p>
 						{% if review.flavors.all %}
-							<strong>Flavor Profile</strong>
+							<strong>Flavor Profile:</strong>
 							<p>
 								{{review.flavors.all|join:", "}}
 							</p>
@@ -39,4 +39,3 @@
 		{% endif %}
 	</div>
 {% endblock %}
-
