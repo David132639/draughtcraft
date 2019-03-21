@@ -4,12 +4,9 @@
   Index
 {% endblock %}
 {% block jumbo_block %}
-Welcome to the home of good beer
+  Welcome to the home of good beer
 {% endblock %}
 {% block body_block %}
-
-
-
   <div class="container ">
     <div class="row">
       <div class="col-sm-6">
@@ -19,16 +16,12 @@ Welcome to the home of good beer
             <!--django beer stuff in here-->
             {% if beers %}
               {% for beer in beers %}
-              <div class="row">
+                <div class="row">
                   <div class="col-md-6">  <a href="{% url 'beers' beer.slug %}">{{ beer.name }}</a>
-              {{ beer.tagline }}</div>
-
-              <div class="col-md-6">
+                {{ beer.tagline }}</div>
+                <div class="col-md-6">
                   <img class="img-thumbnail" src="{{ MEDIA_URL }}{{ beer.image }}" alt="an image of {{ beer.name }}">
-              </div></div>
-
-
-
+                </div></div>
               {% endfor %}
             {% else %}
             {% endif %}
@@ -39,28 +32,23 @@ Welcome to the home of good beer
         <div class="card">
           <div class="card-header">Top Pubs</div>
           <div class="card-body">
-            <!--django bar stuff in here-->
-            {% if business %}
-              {% for pub in business %}
-
-
-              <div class="row">
-
-                <div class="col-md-8">
-                <a href="{% url 'pubs' pub.slug %}"> {{ pub.name }}</a>
-                {{ pub.description }}<br/>  
-              
-                </div>
-                <div class="col-md-4">
-                
-               <img class="img-thumbnail" src="{{ MEDIA_URL }}{{ pub.image }}" alt="an image of {{ pub.name }}">
-
-              </div>
-
-              {% endfor %}
-              </div>
-            {% else %}
-            {% endif %}
+            <div class="card-block">
+              <!--django bar stuff in here-->
+              {% if business %}
+                {% for pub in business %}
+                  <div class="row">
+                    <div class="col-md-8">
+                      <a href="{% url 'pubs' pub.slug %}"> {{ pub.name }}</a>
+                      {{ pub.description }}<br/>
+                      
+                    </div>
+                    <div class="col-md-4">
+                      <img class="img-thumbnail" src="{{ MEDIA_URL }}{{ pub.image }}" alt="an image of {{ pub.name }}">
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
