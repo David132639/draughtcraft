@@ -2,7 +2,6 @@
 {% load dac_extras %}
 <script src="{% static 'js/reading.js' %}"></script>
     <div class="container ">
-
         {% for beer in beers %}
             <div class="row list_item .row-eq-height justify-content-center">
                 <div class="col-md-2">
@@ -10,15 +9,21 @@
                 </div>
                 <div class="col-md-10">
                     <a href="{% url 'beers' beer.slug %}"> {{ beer.name }}
-                    {{ beer.tagline }}</a>
-                    <p>{{ beer.description|getShort }}
-                    {% if beer.description|getLong %}
-                        <a href="#" class="read-more">read more</a>
+                      {{ beer.tagline }}
+                    </a>
+                    <p>
+                      {{ beer.description|getShort }}
+                      {% if beer.description|getLong %}
+                        <a href="#" class="read-more">
+                          read more
+                        </a>
                         <span class="hide">
-                        {{beer.description|getLong}}
-                        <a href="#" class="read-less">read less</a>
+                          {{beer.description|getLong}}
+                          <a href="#" class="read-less">
+                            read less
+                          </a>
                         </span>
-                    {% endif %}
+                      {% endif %}
                     </p>
                 </div>
             </div>
