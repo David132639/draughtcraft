@@ -37,7 +37,16 @@ Details of {{ beer.name }}
           {% endif %}
         </div>
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
+            <strong>Details</strong><br/>
+            <ul id="details">
+              <li>ABV: {{ beer.abv }}</li>
+              <li>IBU: {{beer.ibu}}</li>
+              <li>OG: {{beer.og}}</li>
+              <li>Calories: {{beer.calories}}</li>
+            </ul>
+          </div>
+          <div class="col-md-3">
             <strong>Ingredients</strong><br/>
             <ul id="ingredients">
               {% for ingredient in beer.ingredients.all %}
@@ -45,7 +54,7 @@ Details of {{ beer.name }}
               {% endfor %}
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
             <strong>Tasting notes</strong>
               <ul id="flavours">
                 {% for flavor in beer.flavors.all %}
@@ -54,7 +63,7 @@ Details of {{ beer.name }}
               </ul>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
             <strong>Stockists</strong>
             {% if stockists %}
               <ul>
