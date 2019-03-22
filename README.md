@@ -2,7 +2,7 @@
 WAD2 group project
 
 To deploy:
-* use **Python3.6** (should work on Python 3.7 as well)
+* use **Python3.6.7** (should work on Python 3.7 as well)
 * git clone [repo]
 * pip install -r requirements.txt 
 * python manage.py makemigrations dac
