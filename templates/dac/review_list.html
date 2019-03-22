@@ -20,7 +20,12 @@
 					<div class="col-md-2 col-sm-2 col-3">
 						<img class="img-thumbnail img-fluid review_image" src="{{MEDIA_URL}}{{review.submitter.image}}">
 					</div>
-					<div class="col-md-8 col-sm-10 col-9">
+					<div class="col-md-2 col-sm-2 col-3">
+						{% if review.image %}
+							<img class="img-thumbnail img-fluid review_image" src="{{MEDIA_URL}}{{review.image}}">
+						{% endif %}
+					</div>
+					<div class="col-md-8 col-sm-8 col-6">
 						{% if user.username == review.submitter.user.username %}
 							You rated {{review.rating}} out of 5
 						{% else %}
