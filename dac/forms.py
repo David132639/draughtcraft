@@ -67,7 +67,7 @@ RATING_CHOICES = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),]
 class BeerReview(forms.ModelForm):
 	image = forms.ImageField(help_text='Image of your beer',required=False,)
 	rating = forms.ChoiceField(help_text="Rating",choices=RATING_CHOICES)
-	flavours = forms.CharField(help_text="Flavour profile")
+	flavours = forms.CharField(help_text="Flavour profile",required=False)
 	review = forms.CharField(widget=forms.Textarea(),help_text="Review text")
 
 
