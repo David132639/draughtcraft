@@ -4,13 +4,15 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from os.path import join
 
-class User(AbstractUser):
-	is_business = models.BooleanField(default=False)
 
+class User(AbstractUser):
+	'''Default auth user model incorporating business flag'''
+	is_business = models.BooleanField(default=False)
 	def __str__(self):
 		return self.username
 
 class Ingredient(models.Model):
+	'''fixed ingredient types for beers, differentiated types of hops etc'''
 	MALTS = "MA"
 	HOPS = "HO"
 	OTHER = "OH"
@@ -32,6 +34,7 @@ class Ingredient(models.Model):
 		return self.name
 
 class Flavor(models.Model):
+	'''Fixed flavour entities for use within beer properties and reviews'''
 	BITTERNESS = "BI"
 	SWEETNESS = "SW"
 	COLOR = "CO"
@@ -56,6 +59,7 @@ class Flavor(models.Model):
 		return self.name
 
 class Beer(models.Model):
+
 	name = models.CharField(max_length=30, unique=True)
 	tagline = models.CharField(max_length=128)
 	image = models.ImageField(upload_to='beer_images', blank=True)
@@ -69,6 +73,7 @@ class Beer(models.Model):
 	ingredients = models.ManyToManyField(Ingredient)
 	flavors = models.ManyToManyField(Flavor)
 	
+
 	def get_review_average(self):
 		ratings = Review.objects.filter(beer=self)
 		if ratings:
@@ -101,10 +106,11 @@ class Business(models.Model):
 		primary_key=True
 	)
 
+	beers = models.ManyToManyField(Beer)
+	
+	#queried from google places api
 	lng = models.FloatField(null=True)
 	lat = models.FloatField(null=True)
-
-	beers = models.ManyToManyField(Beer)
 	image = models.ImageField(upload_to='business_images',default='business_images/default.png')
 
 	class Meta:

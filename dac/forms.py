@@ -30,7 +30,7 @@ class BusinessForm(forms.ModelForm):
 	description = forms.CharField(required=False, help_text="Business Description", widget=forms.Textarea())
 	stocks = forms.CharField(help_text='Tell us what beers your business stocks')
 	slug = forms.CharField(widget=forms.HiddenInput(),required=False)
-	#need auto complete field for beers
+	#auto-complete provided by static/auto.js
 	class Meta:
 		model=Business
 		fields = ('name','address','description','stocks')
@@ -40,9 +40,9 @@ class BusinessForm(forms.ModelForm):
 		super(BusinessForm, self).__init__(*args, **kwargs)
 		self.fields['stocks'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':"beers"})
 
+	#only serve comma seperated list to views
 	def clean(self):
 		cleaned_data = super(BusinessForm,self).clean()
-
 		if "stocks" in cleaned_data:
 			cleaned_data["stocks"] = [x.strip() for x in cleaned_data["stocks"].split(",")]
 
@@ -61,7 +61,7 @@ class BusinessForm(forms.ModelForm):
 			business.save()
 		return business
 
-
+#rating choices for 5 star rating
 RATING_CHOICES = [(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"),]
 
 class BeerReview(forms.ModelForm):
@@ -82,12 +82,13 @@ class BeerReview(forms.ModelForm):
 		self.fields['flavours'].widget.attrs.update({'id':'form_auto','autocomplete':'on','data-context':'flavours'})
 		self.fields['image'].widget.attrs.update({'type':'image','accept':'image/*'})
 
+	#serve comma seperated text to views, validate rating from form
 	def clean(self):
 		cleaned_data = super(BeerReview,self).clean()
 		if "flavours" in cleaned_data:
 			cleaned_data["flavours"] = [x.strip() for x in cleaned_data['flavours'].split(",")]
 
-		if "ratings" in cleaned_data and (cleaned_data["ratings"]> 0 or cleaned_data["ratings"] < 0):
+		if "ratings" in cleaned_data and (cleaned_data["ratings"]> 5 or cleaned_data["ratings"] < 1):
 			raise ValidationError("rating outwith accepted ie. 0-5 inclusive")
 
 		return cleaned_data

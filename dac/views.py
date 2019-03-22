@@ -23,7 +23,7 @@ def index(request):
 	#get top three rated beers but not implemented yet
 	beers = sorted(Beer.objects.all(),key=lambda x: x.get_review_average(),reverse=True)[:3]
 	print(beers)
-	business = Business.objects.all()[:3]
+	business = sorted(Business.objects.all(),key=lambda x: len(x.beers.all()),reverse=True)[:3]
 	context_dict["business"] = business
 	context_dict["beers"] = beers
 

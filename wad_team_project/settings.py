@@ -157,7 +157,5 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 STATICFILES_DIRS = [
     STATIC_DIR,
-    os.path.join(BASE_DIR,'bower_components')
-
  ]
 STATIC_URL = '/static/'
