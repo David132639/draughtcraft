@@ -103,7 +103,7 @@ def add_beer_review(request,beer_slug):
 				except Flavor.DoesNotExist:
 					pass
 			review.save()
-			return index(request)
+			return beers_reviews(request,beer_slug)
 	return render(request,'dac/add_review.html',context_dict)
 
 @login_required
