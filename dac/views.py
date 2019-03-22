@@ -242,9 +242,11 @@ def user_details(request):
 			if google_addr:
 				business.lat = google_addr["lat"]
 				business.lng =google_addr["lng"]
-				get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,slugify(business.name)))
-				business.image = "business_images/{0}.jpg".format(business.slug)
-
+				success = get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,slugify(business.name)))
+				if success:
+					business.image = "business_images/{0}.jpg".format(business.slug)
+				else:
+					business.image = "business_images/default.png"
 
 			form_list.append(business_form)
 		
