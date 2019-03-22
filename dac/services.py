@@ -19,7 +19,6 @@ def get_image_reference(place_id,client=None):
         return None
 
 def get_image_from_reference(reference,filename,client=None):
-    print(reference," ",filename)
 
     if not client:
         client = googlemaps.Client(key=settings.GOOGLE_PLACES_SERVER_API_KEY)
@@ -30,7 +29,6 @@ def get_image_from_reference(reference,filename,client=None):
             reference["photo_reference"],max_width=175,max_height=175):
 
             if chunk:
-                print("writing chunk")
                 outfile.write(chunk)
     
 
@@ -39,7 +37,6 @@ def get_place_info(address):
     '''Returns basic fields about a given business from the given address
     or none if no results are returned from the api'''
     gmaps = googlemaps.Client(key=settings.GOOGLE_PLACES_SERVER_API_KEY)
-
     place_results = gmaps.find_place(address,input_type="textquery",fields=GOOGLE_MAPS_FIELDS)
 
     try:
