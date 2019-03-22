@@ -1,51 +1,57 @@
 {% extends 'dac/base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-{{ pub.name }}
+  {{ pub.name }}
 {% endblock %}
 {% block jumbo_block %}
   Details of {{pub.name}}
 {% endblock %}
 {% block body_block %}
-<script src="{% static 'js/map.js' %}"></script>
+  <!-- for Google Map -->
+  <script src="{% static 'js/map.js' %}"></script>
 
-<div class="container ">
-  <div class="row">
-    <div class="col-md-4">
-      <img class="pub-thumbnail" src="{{ MEDIA_URL }}{{ pub.image }}" alt="an image of {{ pub.name }}">
+  <div class="container ">
+    <div class="row">
+      <div class="col-md-4">
+        <img class="pub-thumbnail" src="{{ MEDIA_URL }}{{ pub.image }}" alt="an image of {{ pub.name }}">
+      </div>
+      <div class="col-md-5">
+        <em>
+          {{pub.address}}
+        </em>
+        <br>
+        <p class="description">
+          {{pub.description}}
+        </p>
+        <br>
+        (added by {{pub.owner.user.username}})
+      </div>
+      <div class="col-md-3">
+        {{ pub.name }} stocks:
+        <ul>
+          {% for beer in pub.beers.all %}
+            <li>
+              <a href="{% url 'beers' beer.slug %}">
+                {{ beer.name }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-    <div class="col-md-5">
-      <em>{{pub.address}}</em> <br>
-      <p class="description">{{pub.description}}</p> <br>
-      (added by {{pub.owner.user.username}})
-    </div>
-    <div class="col-md-3">
-      {{ pub.name }} stocks:
-      <ul>
-        {% for beer in pub.beers.all %}
-        <li><a href="{% url 'beers' beer.slug %}"> {{ beer.name }}</a></li>
-        {% endfor %}
-      </ul>
+    <div class="row">
+      <br>
+
+      <!-- this is realted to the Google Maps Api -->
+        <div id="map" data-name="{{pub.slug}}"></div>
+        <!--keep me before div map the bottom -->
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key={{key}}&callback=initMap">
+        </script>
+      <!--end of map things -->
+
     </div>
   </div>
-  <div class="row">
-    <br>
-
-    <!-- this is stuff realted to the google maps api -->
-<div id="map" data-name="{{pub.slug}}"></div>
-
-
-
-
-<!--keep me before div map the bottom -->
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key={{key}}&callback=initMap">
-    </script>
-
-<!--end of map stuff-->
-
-  </div>
-</div>
 
 
 

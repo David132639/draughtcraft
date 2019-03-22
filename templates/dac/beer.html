@@ -14,20 +14,26 @@ Details of {{ beer.name }}
       </div>
       <div class="col-lg-10">
         <div class="row">
-          <p class="description" id="description">{{ beer.description }}</p>
+          <p class="description" id="description">
+            {{ beer.description }}
+          </p>
         </div>
         <div class="row">
           {% if avg %}
-            Rated {{avg|floatformat:-2}} out of 5
-            &nbsp;<a href="{% url 'beer_reviews' beer.slug %}">View all reviews</a>
-
+            Rated {{avg|floatformat:-2}} out of 5 &nbsp;
+            <a href="{% url 'beer_reviews' beer.slug %}">
+              View all reviews
+            </a>
           {% else %}
             No reviews yet...
           {% endif %}
         </div>
         <div class="row">
           {% if user.is_authenticated %}
-            Why not: &nbsp; <a href="{% url 'beer_add_review' beer.slug %}">Add or edit your review </a>
+            Why not: &nbsp;
+            <a href="{% url 'beer_add_review' beer.slug %}">
+              Add or edit your review
+            </a>
           {% endif %}
         </div>
         <div class="row">
@@ -38,41 +44,63 @@ Details of {{ beer.name }}
         </div>
         <div class="row">
           <div class="col-md-3">
-            <strong>Details</strong><br/>
+            <strong>Details</strong>
+            <br>
             <ul id="details">
-              <li>ABV: {{ beer.abv }}</li>
-              <li>IBU: {{beer.ibu}}</li>
-              <li>OG: {{beer.og}}</li>
-              <li>Calories: {{beer.calories}}</li>
+              <li>
+                ABV: {{ beer.abv }}
+              </li>
+              <li>
+                IBU: {{beer.ibu}}
+              </li>
+              <li>
+                OG: {{beer.og}}
+              </li>
+              <li>
+                Calories / 100ml: {{beer.calories}}
+              </li>
             </ul>
           </div>
           <div class="col-md-3">
-            <strong>Ingredients</strong><br/>
+            <strong>
+              Ingredients
+            </strong>
+            <br>
             <ul id="ingredients">
               {% for ingredient in beer.ingredients.all %}
-              <li> {{ ingredient }} </li>
+                <li>
+                  {{ ingredient }}
+                </li>
               {% endfor %}
           </div>
-
           <div class="col-md-3">
-            <strong>Tasting notes</strong>
-              <ul id="flavours">
-                {% for flavor in beer.flavors.all %}
-                  <li>{{ flavor.name }}</li>
-                {% endfor %}
-              </ul>
+            <strong>
+              Tasting notes
+            </strong>
+            <ul id="flavours">
+              {% for flavor in beer.flavors.all %}
+                <li>
+                  {{ flavor.name }}
+                </li>
+              {% endfor %}
+            </ul>
           </div>
-
           <div class="col-md-3">
-            <strong>Stockists</strong>
+            <strong>
+              Stockists
+            </strong>
             {% if stockists %}
               <ul>
                 {% for stocker in stockists %}
-                  <li> <a href="{% url 'pubs' stocker.slug %}">{{stocker.name}}</a></li>
+                  <li>
+                    <a href="{% url 'pubs' stocker.slug %}">
+                      {{stocker.name}}
+                    </a>
+                  </li>
                 {% endfor %}
               </ul>
             {% else %}
-              </br>
+              <br>
               This beer is not stocked anywhere... yet
             {% endif %}
           </div>

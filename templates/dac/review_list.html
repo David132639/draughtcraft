@@ -17,10 +17,12 @@
 		{% else %}
 			{% for review in reviews %}
 				<div class="row review_entry">
+					<!-- profile image of reviewer -->
 					<div class="col-md-2 col-sm-2 col-3">
 						<img class="img-thumbnail img-fluid review_image" src="{{MEDIA_URL}}{{review.submitter.image}}">
 					</div>
 					<div class="col-md-2 col-sm-2 col-3">
+						<!-- image of beer submitted by user, if avaliable -->
 						{% if review.image %}
 							<img class="img-thumbnail img-fluid review_image" src="{{MEDIA_URL}}{{review.image}}">
 						{% endif %}
@@ -31,7 +33,14 @@
 						{% else %}
 							{{review.submitter.user.username}} rated {{review.rating}} out of 5
 						{% endif %}
-						<p><strong>Review:</strong><br>{{review.review}}</p>
+						<p>
+							<strong>
+								Review:
+							</strong>
+							<br>
+							{{review.review}}
+						</p>
+						<!-- show subjective flavurs, if part of review -->
 						{% if review.flavors.all %}
 							<strong>Flavor Profile:</strong>
 							<p>

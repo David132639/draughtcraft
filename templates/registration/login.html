@@ -10,13 +10,16 @@
 		<div class="row justify-content-center">
 			<form method="post" action=".">
 				{% csrf_token %}
+				<!-- creates form -->
 				{{ form.as_p }}
 				<div class="col">
 					<input type="submit" value="Log in" />
 					<input type="hidden" name="next" value="{{ next }}" />
 					<p>
 						Not a member?
-						<a href="{% url 'registration_register' %}">Register</a>
+						<a href="{% url 'registration_register' %}">
+							Register
+						</a>
 					</p>
 				</div>
 			</form>

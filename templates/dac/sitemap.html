@@ -1,47 +1,62 @@
 {% extends 'dac/base.html' %}
-
 {% block title_block %}
-Sitemap
+	Sitemap
 {% endblock %}
 {% block jumbo_block %}
 	Sitemap
 {% endblock %}
 {% block body_block %}
-
-
-
-<div class="container ">
-	<ul>
-		<li><a href="{% url 'index' %}">Home</a></li>
-		<li><a href="{% url 'beers' %}">Beers</a></li>
+	<div class="container ">
 		<ul>
-			<li><a href="{% url 'beers' %}">Beers</a>/specific_beer</li>
+			<li>
+				<a href="{% url 'index' %}">Home</a>
+			</li>
+			<li>
+				<a href="{% url 'beers' %}">Beers</a>
+			</li>
 			<ul>
-				<li><a href="{% url 'beers' %}">Beers</a>/specific_beer/add_review</li>
-				<li><a href="{% url 'beers' %}">Beers</a>/specific_beer/view_reviews
+				<li>
+					<a href="{% url 'beers' %}">Beers</a>/specific_beer
+				</li>
+				<ul>
+					<li>
+						<a href="{% url 'beers' %}">Beers</a>/specific_beer/add_review
+					</li>
+					<li>
+						<a href="{% url 'beers' %}">Beers</a>/specific_beer/view_reviews
+					</li>
+				</ul>
+			</ul>
+			<li>
+				<a href="{% url 'pubs' %}">Pubs</a>
+			</li>
+			<ul>
+				<li>
+					<a href="{% url 'pubs' %}">Pubs</a>/specific_pub
 				</li>
 			</ul>
+
+			<li>
+				<a href="{% url 'auth_login' %}">Login</a>
+			</li>
+			<li>
+				<a href="{% url 'registration_register' %}">Register</a>
+			</li>
+			<li>
+				<a href="{% url 'user_details' %}">Account's details</a>
+			</li>
+			<li>
+				<a href="{% url 'reviews' %}">Account's reviews</a>
+			</li>
+			<li>
+				<a href="{% url 'sitemap' %}">Sitemap</a>
+			</li>
+			<li>
+				<a href="{% url 'about' %}">About</a>
+			</li>
+			<li>
+				<a href="{% url 'privacy' %}">Privacy</a>
+			</li>
 		</ul>
-		<li><a href="{% url 'pubs' %}">Pubs</a></li>
-		<ul>
-			<li><a href="{% url 'pubs' %}">Pubs</a>/specific_pub</li>
-		</ul>
-
-
-		<li><a href="{% url 'auth_login' %}">Login</a></li>
-		<li><a href="{% url 'registration_register' %}">Register</a></li>
-		<li><a href="{% url 'user_details' %}">Account's details</a></li>
-		<li><a href="{% url 'reviews' %}">Account's reviews</a></li>
-
-
-		<li><a href="{% url 'sitemap' %}">Sitemap</a></li>
-		<li><a href="{% url 'about' %}">About</a></li>
-		<li><a href="{% url 'privacy' %}">Privacy</a></li>
-
-
-
-	</ul>
-
-</div>
-
+	</div>
 {% endblock %}
