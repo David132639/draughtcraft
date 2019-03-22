@@ -244,7 +244,7 @@ def user_details(request):
 				business.lng =google_addr["lng"]
 				success = get_image_from_address(google_addr["address"],"{0}/business_images/{1}.jpg".format(settings.MEDIA_ROOT,slugify(business.name)))
 				if success:
-					business.image = "business_images/{0}.jpg".format(business.name)
+					business.image = "business_images/{0}.jpg".format(slugify(business.name))
 				else:
 					business.image = "business_images/default.png"
 
